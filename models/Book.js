@@ -12,8 +12,7 @@ const BookSchema = new mongoose.Schema({
   comments: {
     type: [String],
     min: 1,
-    max: 500,
-    default: []
+    max: 500
   }
 });
 
