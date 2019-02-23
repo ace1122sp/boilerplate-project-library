@@ -4,7 +4,8 @@
 	"description": "boilerplate",
 	"main": "server.js",
 	"scripts": {
-		"start": "node server.js"
+		"start": "node server.js",
+		"test": "mocha ./tests"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^1.2.15",
