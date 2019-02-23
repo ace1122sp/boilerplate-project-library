@@ -1,0 +1,7 @@
+const DEVELOPMENT = 'DEVELOPMENT';
+const PRODUCTION = 'PRODUCTION';
+
+module.exports = {
+  DEVELOPMENT,
+  PRODUCTION
+};
