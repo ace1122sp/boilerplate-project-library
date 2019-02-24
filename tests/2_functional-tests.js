@@ -31,6 +31,18 @@ const _saveBook = (book, done) => {
       console.error(err);
       done();
     });
+};
+
+const _deleteBook = (prop, query, done) => {
+  Book.findByIdAndDelete({ [prop]: query }, (err, res) => {
+    if (err) {
+      console.error();
+      done();
+    } else {
+      console.log('delete from db successful');
+      done();
+    }
+  });
 }
 
 suite('Functional Tests', () => {
@@ -68,11 +80,42 @@ suite('Functional Tests', () => {
     });
 
     suite('POST /api/books with title => create book object/expect book object', () => {
+
+      test('Test POST /api/books with title', done => {
+        // arrange
+        const title = 'post book title';
+        const expectedStatus = 201;
+
+        // act
+        chai.request(server)
+          .post('/api/books')
+          .send({ title })
+          .end((err, res) => {
+            // assert
+            assert.equal(res.status, expectedStatus);
+
+            done();
+          });
+      });
       
-      test('Test POST /api/books with title');
+      test('Test POST /api/books with no title given', done => {
+        // arrange 
+        const expectedStatus = 400;
+        
+        // act
+        chai.request(server)
+        .post('/api/books')
+        .end((err, res) => {
+          // assert 
+          assert.equal(res.status, expectedStatus);
+          
+          done();
+        });
+      });
       
-      test('Test POST /api/books with no title given');
-      
+      suiteTeardown(done => {
+        _deleteBook('title', title, done);
+      });
     });
 
     suite('GET /api/books => array of books', () => {    
@@ -178,9 +221,36 @@ suite('Functional Tests', () => {
     });
 
     suite('POST /api/books/[id] => add comment/expect book object with id', () => {
+      // arrange
+      const testBook = {
+        _id: uuid4(),
+        title: 'test title'
+      };
+
+      suiteSetup(done => {
+        _saveBook(testBook, done);
+      });
+
+      test('Test POST /api/books/[id] with comment', done => {
+        // arrange
+        const expectedStatus = 201;
+        const comment = 'test comment';
+
+        // act
+        chai.request(server)
+          .post(`/api/books/${testBook._id}`)
+          .send({ comment })
+          .end((err, res) => {
+            // assert
+            assert.equal(res.status, expectedStatus);
+
+            done();
+          });
+      });
       
-      test('Test POST /api/books/[id] with comment');
-      
+      suiteTeardown(done => {
+        _deleteBook('_id', testBook._id, done);
+      });
     });
 
     suite('DELETE /api/books/[id] => delete book with [id]', () => {
