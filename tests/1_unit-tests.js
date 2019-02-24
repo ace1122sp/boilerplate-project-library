@@ -1,7 +1,8 @@
-var chai = require('chai');
-var assert = chai.assert;
+const chai = require('chai');
+const assert = chai.assert;
+const { suite, test } = require('mocha');
 
-suite('Unit Tests', function(){
+suite.skip('Unit Tests', function(){
   
   //No unit tests needed for this project
 
