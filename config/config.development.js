@@ -6,6 +6,6 @@ module.exports = {
     env: DEVELOPMENT
   },
   db: {
-    mongoURI: 'mongodb://localhost:27017/stockpicker'
+    mongoURI: 'mongodb://localhost:27017/library'
   }
 }
