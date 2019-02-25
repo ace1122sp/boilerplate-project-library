@@ -17,9 +17,6 @@ const assert = chai.assert;
 
 chai.use(chaiHttp);
 
-// helper function to write:
-// saveBook, deleteBook
-
 const _saveBook = (book, done) => { 
   let b = new Book(book);
   b.save()
@@ -47,26 +44,6 @@ const _deleteBook = (prop, query, done) => {
 
 suite('Functional Tests', () => {
 
-  /*
-  * ----[EXAMPLE TEST]----
-  * Each test should completely test the response of the API end-point including response status code!
-  */
-  test.skip('#example Test GET /api/books', function(done){
-     chai.request(server)
-      .get('/api/books')
-      .end(function(err, res){
-        assert.equal(res.status, 200);
-        assert.isArray(res.body, 'response should be an array');
-        assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
-        assert.property(res.body[0], 'title', 'Books in array should contain title');
-        assert.property(res.body[0], '_id', 'Books in array should contain _id');
-        done();
-      });
-  });
-  /*
-  * ----[END of EXAMPLE TEST]----
-  */
-
   suite('Routing tests', () => {
 
     suiteSetup(done => {
@@ -83,17 +60,26 @@ suite('Functional Tests', () => {
 
       test('Test POST /api/books with title', done => {
         // arrange
-        const title = 'post book title';
         const expectedStatus = 201;
-
+        const expected = {
+          title: 'post book title',
+          _id: uuid4()
+        };
+        const expectedCommentCount = 0;
+        
         // act
         chai.request(server)
           .post('/api/books')
-          .send({ title })
-          .end((err, res) => {
-            // assert
-            assert.equal(res.status, expectedStatus);
-
+          .send(expected)
+          .end((err, res) => {            
+            const actualStatus = res.status;
+            const actualBody = res.body;
+            
+            // assert 
+            assert.equal(actualStatus, expectedStatus);
+            assert.propertyVal(actualBody, '_id', expected._id);
+            assert.propertyVal(actualBody, 'title', expected.title);
+            assert.propertyVal(actualBody, 'commentcount', expectedCommentCount);
             done();
           });
       });
@@ -234,15 +220,19 @@ suite('Functional Tests', () => {
       test('Test POST /api/books/[id] with comment', done => {
         // arrange
         const expectedStatus = 201;
-        const comment = 'test comment';
+        const expectedComment = 'test comment';
 
         // act
         chai.request(server)
           .post(`/api/books/${testBook._id}`)
-          .send({ comment })
+          .send({ comment: expectedComment })
           .end((err, res) => {
+            const actual = res.body;
+
             // assert
             assert.equal(res.status, expectedStatus);
+            assert.equal(actual.comments.length, 1);
+            assert.equal(actual.comments[0], expectedComment);
 
             done();
           });
