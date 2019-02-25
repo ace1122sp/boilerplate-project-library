@@ -5,6 +5,8 @@ const config = require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
 const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
@@ -18,9 +20,21 @@ dbConnect();
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
+app.use(helmet());
+app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
+app.use((req, res, next) => {
+  res.set({
+    'Content-Security-Policy': "default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self'; base-uri 'none'"
+  });
+
+  next();
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev')); // configure according to env
+
+// add gzip config
 
 //Index page (static HTML)
 app.route('/')
@@ -34,6 +48,8 @@ fccTestingRoutes(app);
 //Routing for API 
 apiRoutes(app);  
     
+// add error handling
+
 //404 Not Found Middleware
 app.use(function(req, res, next) {
   res.status(404)
