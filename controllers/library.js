@@ -55,7 +55,7 @@ const deleteBook = (req, res) => {
 };
 
 const addComment = (req, res) => {
-  Book.findByIdAndUpdate(req.params.id, { $push: { comments: req.body.comment } })
+  Book.findByIdAndUpdate(req.params.id, { $push: { comments: req.body.comment } }, { new: true })
     .then(book => {
       res.status(201).json(book);
     })
