@@ -1,8 +1,7 @@
 const Book = require('../models/Book');
 
 const getAllBooks = (req, res) => {
-  // you need to handle limit and offset
-  Book.find({})
+  Book.findAll()
     .then(books => {
       res.json(books);
     })
@@ -12,15 +11,19 @@ const getAllBooks = (req, res) => {
 const deleteAllBooks = (req, res) => {
   Book.deleteMany({})
     .then(() => {
-      res.status(204).send('complete delete successful');
+      res.status(200).send('complete delete successful');
     })
     .catch(err => {})
 };
 
 const getBook = (req, res) => {
   Book.findById(req.params.id)
-    .then(book => {
+    .then(book => {  
+      if (!book) return book;
       res.json(book);
+    })
+    .then(book => {
+      res.status(404).send('no book exists');
     })
     .catch(err => {})
 };
@@ -37,7 +40,7 @@ const addBook = (req, res) => {
 const deleteBook = (req, res) => {
   Book.findByIdAndDelete(req.params.id)
     .then(() => {
-      res.status(204).send('delete successful');
+      res.status(200).send('delete successful');
     })
     .catch(err => {});
 };
@@ -58,5 +61,3 @@ module.exports = {
   deleteBook,
   addComment
 };
-
-

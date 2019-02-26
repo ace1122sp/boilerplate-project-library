@@ -30,6 +30,18 @@ const _saveBook = (book, done) => {
     });
 };
 
+const _saveManyBooks = (books, done) => {
+  Book.create(books)
+    .then(books => {
+      console.log('books saved to db');
+      done();
+    })
+    .catch(err => {
+      console.error(err);
+      done();
+    });
+}
+
 const _deleteBook = (prop, query, done) => {
   Book.findByIdAndDelete({ [prop]: query }, (err, res) => {
     if (err) {
@@ -57,14 +69,15 @@ suite('Functional Tests', () => {
     });
 
     suite('POST /api/books with title => create book object/expect book object', () => {
+      // arrange      
+      const expected = {
+        title: 'post book title',
+        _id: uuid4()
+      };
 
       test('Test POST /api/books with title', done => {
-        // arrange
+        // arrange      
         const expectedStatus = 201;
-        const expected = {
-          title: 'post book title',
-          _id: uuid4()
-        };
         const expectedCommentCount = 0;
         
         // act
@@ -100,11 +113,20 @@ suite('Functional Tests', () => {
       });
       
       suiteTeardown(done => {
-        _deleteBook('title', title, done);
+        _deleteBook('title', expected.title, done);
       });
     });
 
     suite('GET /api/books => array of books', () => {    
+      // arrange
+      const expected = {
+        _id: uuid4(),
+        title: 'test title'        
+      }
+
+      setup(done => {
+        _saveBook(expected, done);
+      });
 
       test('Test GET /api/books', done => {
         // arrange
@@ -127,15 +149,33 @@ suite('Functional Tests', () => {
             assert.property(actualBook, expectedProperties[2], 'book object should contain property commentcount');
             done();
           });
-      });      
+      });
+      
+      teardown(done => {
+        _deleteBook('title', expected.title, done);
+      });
       
     });
 
     suite('DELETE /api/books => delete all books', () => {
+      // arrange
+      const testBook1 = {
+        title: 'test book 1',
+        _id: uuid4()
+      };
+
+      const testBook2 = {
+        title: 'test book 2',
+        _id: uuid4()
+      };
+
+      setup(done => {
+        _saveManyBooks([testBook1, testBook2], done);
+      });
 
       test('Test DELETE /api/books', done => {
         // arrange
-        const expectedStatus = 204;
+        const expectedStatus = 200;
         const expectedMessage = 'complete delete successful';
         
         // act
@@ -143,8 +183,9 @@ suite('Functional Tests', () => {
         .delete('/api/books')
         .end((err, res) => {
           // assert
+          console.log(res.text);
           assert.equal(res.status, expectedStatus);
-          assert.equal(res.body, expectedMessage);
+          assert.equal(res.text, expectedMessage);
 
           done();
         });
@@ -175,7 +216,7 @@ suite('Functional Tests', () => {
           .end((err, res) => {
             // assert 
             assert.equal(res.status, expectedStatus);
-            assert.equal(res.body, expectedMessage);
+            assert.equal(res.text, expectedMessage);
 
             done();
           });
@@ -185,7 +226,6 @@ suite('Functional Tests', () => {
       test('Test GET /api/books/[id] with valid id in db', done => {
         // arrange
         const expectedStatus = 200;
-        const expectedCommentCount = 0;
         
         // act 
         chai.request(server)
@@ -198,7 +238,7 @@ suite('Functional Tests', () => {
             assert.equal(actualStatus, expectedStatus);
             assert.propertyVal(actualBody, '_id', expected._id);
             assert.propertyVal(actualBody, 'title', expected.title);
-            assert.propertyVal(actualBody, 'commentcount', expectedCommentCount);
+            assert.isArray(actualBody.comments, 'comments property should be an array');
 
             done();
           });
@@ -257,7 +297,7 @@ suite('Functional Tests', () => {
 
       test('Test DELETE /api/books/[id]', done => {
         // arrange 
-        const expectedStatus = 204;
+        const expectedStatus = 200;
         const expectedMessage = 'delete successful';
 
         // act 
@@ -266,7 +306,7 @@ suite('Functional Tests', () => {
           .end((err, res) => {            
             // assert
             assert.equal(res.status, expectedStatus);
-            assert.equal(res.body, expectedMessage);
+            assert.equal(res.text, expectedMessage);
 
             done();
           });
@@ -274,8 +314,12 @@ suite('Functional Tests', () => {
     });
 
     suiteTeardown(() => {
-      Book.remove({}, err => {});
+      Book.deleteMany({}, err => {})
+        .then(() => {
+          console.log('end of functional tests');
+          process.exit(0);
+        })
+        .catch(err => {}); // to handle
     });
   });
-
 });
