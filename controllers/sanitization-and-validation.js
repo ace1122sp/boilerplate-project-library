@@ -1,5 +1,5 @@
 const { sanitizeParam, sanitizeBody } = require('express-validator/filter');
-const { param } = require('express-validator/check');
+const { param, validationResult } = require('express-validator/check');
 
 const sanitizeAndValidateId = [  
   sanitizeParam('id')
@@ -21,9 +21,20 @@ const sanitizeComment = [
     .escape()
 ];
 
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   sanitizeAndValidateId,
   sanitizeTitle, 
-  sanitizeComment
+  sanitizeComment,
+  handleValidationErrors
 };
 
