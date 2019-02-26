@@ -1,3 +1,5 @@
+const uuid4 = require('uuid/v4');
+
 const Book = require('../models/Book');
 
 const getAllBooks = (req, res) => {
@@ -32,9 +34,16 @@ const addBook = (req, res) => {
   let book = new Book(res.locals.book);
   book.save()
     .then(b => {
+      console.log('book: \n', b);
       res.status(201).json(b);
     })
-    .catch(err => {});
+    .catch(err => {
+      if (err.name === 'ValidationError') {
+        res.sendStatus(400);
+      } else {
+        // to handle;
+      }
+    });
 };
 
 const deleteBook = (req, res) => {
@@ -53,11 +62,17 @@ const addComment = (req, res) => {
     .catch(err => {})
 };
 
+const formatBook = (req, res, next) => {
+  res.locals.book = { title: req.body.title, _id: uuid4() };
+  next();
+};
+
 module.exports = {
   getAllBooks, 
   deleteAllBooks,
   getBook,
   addBook, 
   deleteBook,
-  addComment
+  addComment,
+  formatBook
 };

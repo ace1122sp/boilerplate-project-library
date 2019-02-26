@@ -71,14 +71,12 @@ suite('Functional Tests', () => {
     suite('POST /api/books with title => create book object/expect book object', () => {
       // arrange      
       const expected = {
-        title: 'post book title',
-        _id: uuid4()
+        title: 'post book title'
       };
 
       test('Test POST /api/books with title', done => {
         // arrange      
         const expectedStatus = 201;
-        const expectedCommentCount = 0;
         
         // act
         chai.request(server)
@@ -90,9 +88,8 @@ suite('Functional Tests', () => {
             
             // assert 
             assert.equal(actualStatus, expectedStatus);
-            assert.propertyVal(actualBody, '_id', expected._id);
             assert.propertyVal(actualBody, 'title', expected.title);
-            assert.propertyVal(actualBody, 'commentcount', expectedCommentCount);
+            assert.isArray(actualBody.comments, 'comments property should be an array');
             done();
           });
       });

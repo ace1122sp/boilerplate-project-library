@@ -8,12 +8,12 @@
 
 'use strict';
 
-const { getAllBooks, addBook, deleteAllBooks, getBook, addComment, deleteBook } = require('../controllers/library');
+const { getAllBooks, addBook, deleteAllBooks, getBook, addComment, deleteBook, formatBook } = require('../controllers/library');
 
 module.exports = app => {
   app.route('/api/books')
     .get(getAllBooks)
-    .post(addBook)    
+    .post(formatBook, addBook)    
     .delete(deleteAllBooks);
 
   app.route('/api/books/:id')
