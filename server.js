@@ -12,6 +12,7 @@ const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
 const dbConnect = require('./db');
+const errorHandler = config.app.env === 'PRODUCTION' ? require('./libs/prodErrorHandler') : require('./libs/devErrorHandler');
 
 const app = express();
 
@@ -49,6 +50,8 @@ fccTestingRoutes(app);
 apiRoutes(app);  
     
 // add error handling
+app.use(errorHandler.logErrors);
+app.use(errorHandler.clientResponse);
 
 //404 Not Found Middleware
 app.use(function(req, res, next) {

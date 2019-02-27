@@ -2,35 +2,41 @@ const uuid4 = require('uuid/v4');
 
 const Book = require('../models/Book');
 
-const getAllBooks = (req, res) => {
+const getAllBooks = (req, res, next) => {
   Book.findAll()
     .then(books => {
       res.json(books);
     })
-    .catch(err => {})
+    .catch(err => {
+      next(err);
+    });
 };
 
-const deleteAllBooks = (req, res) => {
+const deleteAllBooks = (req, res, next) => {
   Book.deleteMany({})
     .then(() => {
       res.status(200).send('complete delete successful');
     })
-    .catch(err => {})
+    .catch(err => {
+      next(err);
+    });
 };
 
-const getBook = (req, res) => {
+const getBook = (req, res, next) => {
   Book.findById(req.params.id)
     .then(book => {  
-      if (!book) return book;
-      res.json(book);
+      if (!book) {
+        res.status(404).send('no book exists');
+      } else {
+        res.json(book);
+      }
     })
-    .then(book => {
-      res.status(404).send('no book exists');
-    })
-    .catch(err => {})
+    .catch(err => {      
+      next(err);
+    });
 };
 
-const addBook = (req, res) => {
+const addBook = (req, res, next) => {
   let book = new Book(res.locals.book);
   book.save()
     .then(b => {
@@ -41,25 +47,29 @@ const addBook = (req, res) => {
       if (err.name === 'ValidationError') {
         res.sendStatus(400);
       } else {
-        // to handle;
+        next(err);
       }
     });
 };
 
-const deleteBook = (req, res) => {
+const deleteBook = (req, res, next) => {
   Book.findByIdAndDelete(req.params.id)
     .then(() => {
       res.status(200).send('delete successful');
     })
-    .catch(err => {});
+    .catch(err => {
+      next(err);
+    });
 };
 
-const addComment = (req, res) => {
+const addComment = (req, res, next) => {
   Book.findByIdAndUpdate(req.params.id, { $push: { comments: req.body.comment } }, { new: true })
     .then(book => {
       res.status(201).json(book);
     })
-    .catch(err => {})
+    .catch(err => {
+      next(err);
+    });
 };
 
 const formatBook = (req, res, next) => {

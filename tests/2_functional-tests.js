@@ -13,6 +13,7 @@ const uuid4 = require('uuid/v4');
 
 const server = require('../server');
 const Book = require('../models/Book');
+const { asyncTest, testExit } = require('../libs/devErrorHandler');
 const assert = chai.assert;
 
 chai.use(chaiHttp);
@@ -25,8 +26,7 @@ const _saveBook = (book, done) => {
       done();
     })
     .catch(err => {
-      console.error(err);
-      done();
+      asyncTest(err, done);
     });
 };
 
@@ -37,8 +37,7 @@ const _saveManyBooks = (books, done) => {
       done();
     })
     .catch(err => {
-      console.error(err);
-      done();
+      asyncTest(err, done);
     });
 }
 
@@ -316,7 +315,7 @@ suite('Functional Tests', () => {
           console.log('end of functional tests');
           process.exit(0);
         })
-        .catch(err => {}); // to handle
+        .catch(testExit);
     });
   });
 });
