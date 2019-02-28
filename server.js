@@ -18,8 +18,6 @@ const app = express();
 
 dbConnect();
 
-app.use('/public', express.static(process.cwd() + '/public'));
-
 app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 app.use(helmet());
 app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
@@ -27,7 +25,7 @@ app.use((req, res, next) => {
   res.set({
     'Content-Security-Policy': "default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self'; base-uri 'none'"
   });
-
+  
   next();
 });
 
@@ -35,7 +33,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev')); // configure according to env
 
+app.use('/public', express.static(process.cwd() + '/public'));
+
 // add gzip config
+// app.get('*.js', (req, res, next) => {
+//   req.url = req.url + '.gz';
+//   res.set({
+//     'Content-Encoding': 'gzip',
+//     'Content-Type': 'text/javascript'
+//   });
+
+//   next();
+// });
 
 //Index page (static HTML)
 app.route('/')
