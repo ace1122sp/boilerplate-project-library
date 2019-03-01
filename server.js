@@ -47,7 +47,7 @@ app.use('/public', express.static(process.cwd() + '/public'));
 // });
 
 //Index page (static HTML)
-app.route('/')
+app.route('/*')
   .get((req, res) => {
     res.sendFile(process.cwd() + '/views/index.html');
   });

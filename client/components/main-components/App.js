@@ -5,13 +5,15 @@ import Home from './Home';
 import Book from './Book';
 import Header from './Header';
 import Footer from './Footer';
+import NotFound from './NotFound';
 
 const App = () => 
   <Fragment>
     <Header />
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route path="/book/" component={Book} />
+      <Route path="/books/:id" component={Book} />
+      <Route path="/" component={NotFound} />
     </Switch>
     <Footer />
   </Fragment>
