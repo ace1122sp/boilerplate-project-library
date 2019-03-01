@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BookCard = (title, commentcount) => 
+const BookCard = ({ title, commentcount }) => 
   <li>
     <b>{title}</b> <i>{commentcount}</i>
   </li>
