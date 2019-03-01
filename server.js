@@ -46,6 +46,9 @@ app.use('/public', express.static(process.cwd() + '/public'));
 //   next();
 // });
 
+//Routing for API 
+apiRoutes(app);  
+
 //Index page (static HTML)
 app.route('/*')
   .get((req, res) => {
@@ -54,9 +57,6 @@ app.route('/*')
 
 //For FCC testing purposes
 fccTestingRoutes(app);
-
-//Routing for API 
-apiRoutes(app);  
     
 // add error handling
 app.use(errorHandler.logErrors);
