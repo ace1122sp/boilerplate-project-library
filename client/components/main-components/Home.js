@@ -4,20 +4,11 @@ import EmptyLibrary from '../helper-components/EmptyLibrary';
 import LoadingPanel from '../helper-components/LoadingPanel';
 import BookCard from '../helper-components/BookCard';
 import AddBook from '../helper-components/AddBook';
+import { fetchBooks } from '../../libs/api-caller';
 
 import { API_BASE } from '../../constants';
 
 const portal = document.getElementById('portal');
-
-const fetchBooks = url => {
-  return fetch(url)
-    .then(res => {
-      if (!res.ok) return Promise.reject(res.status); // to handle
-      return res.json();
-    })
-    .then(res => res)
-    .catch(err => {}) // to handle
-};
 
 const Home = () => {
   const [books, updateBooks] = useState([]);
