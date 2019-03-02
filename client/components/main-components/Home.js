@@ -19,7 +19,7 @@ const Home = () => {
   const [books, updateBooks] = useState([]);
   const [loading, setLoadingStatus] = useState(true);
 
-  const renderBooks = books => books.map(book => <BookCard key={book._id} title={book.title} commentcount={book.commentcount} />);
+  const renderBooks = () => books.map(book => <BookCard key={book._id} title={book.title} commentcount={book.commentcount} />);
 
   const setInitBooks = () => {
     fetchBooks(API_BASE)
@@ -45,7 +45,7 @@ const Home = () => {
       {loading && <LoadingPanel />}
       <section id='book-list'>
         {books.length === 0 && <EmptyLibrary />}
-        <ul>{renderBooks(books)}</ul>
+        <ul>{renderBooks()}</ul>
       </section>
       <aside id='controls-main'>
         <button id='add-book'>
