@@ -4,9 +4,10 @@ import EmptyLibrary from '../helper-components/EmptyLibrary';
 import LoadingPanel from '../helper-components/LoadingPanel';
 import BookCard from '../helper-components/BookCard';
 import AddBook from '../helper-components/AddBook';
-import { fetchBooks } from '../../libs/api-caller';
+import { fetchBooks, fetchDeleteAll } from '../../libs/api-caller';
 
 import { API_BASE } from '../../constants';
+import DeleteDialogue from '../helper-components/DeleteDialogue';
 
 const portal = document.getElementById('portal');
 
@@ -14,6 +15,7 @@ const Home = () => {
   const [books, updateBooks] = useState([]);
   const [loading, setLoadingStatus] = useState(true);
   const [addBookDialogue, toggleAddBookDialogue] = useState(false);
+  const [deleteDialogue, toggleDeleteDialogue] = useState(false);
 
   const renderBooks = () => books.map(book => <BookCard key={book._id} title={book.title} commentcount={book.commentcount} />);
 
@@ -32,13 +34,13 @@ const Home = () => {
       });
   };  
 
-  const openAddBookDialogue = () => {
-    toggleAddBookDialogue(true);
-  };
-
-  const closeAddBookDialogue = () => {
-    toggleAddBookDialogue(false);
-  };
+  const deleteHandler = () => {
+    fetchDeleteAll(API_BASE)
+      .then(res => {})
+      .catch(err => {});
+    
+    toggleDeleteDialogue(false);
+  }
 
   useEffect(() => {
     setInitBooks();    
@@ -46,17 +48,18 @@ const Home = () => {
 
   return (
     <main>
-      {addBookDialogue && ReactDOM.createPortal(<AddBook close={closeAddBookDialogue} />, portal)}
+      {addBookDialogue && ReactDOM.createPortal(<AddBook close={() => toggleAddBookDialogue(false)} />, portal)}
+      {deleteDialogue && ReactDOM.createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
       {loading && <LoadingPanel />}
       <section id='book-list'>
         {books.length === 0 && <EmptyLibrary />}
         <ul>{renderBooks()}</ul>
       </section>      
       <aside id='controls-main'>
-        <button id='add-book' onClick={openAddBookDialogue}>
+        <button id='add-book' onClick={() => toggleAddBookDialogue(true)}>
           add book
         </button>
-        <button id='delete-all'>
+        <button id='delete-all' onClick={() => toggleDeleteDialogue(true)}>
           delete all
         </button>
       </aside>

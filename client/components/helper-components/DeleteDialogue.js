@@ -1,12 +1,15 @@
 import React from 'react';
 
-const DeleteDialogue = () => 
-  <div>
-    <h2>Are you sure?</h2>
+const DeleteDialogue = ({ close, deleteHandler }) => {
+  return (
     <div>
-      <button>Delete</button>
-      <button>Cancel</button>
+      <h2>Are you sure?</h2>
+      <div>
+        <button onClick={deleteHandler}>Delete</button>
+        <button onClick={close}>Cancel</button>
+      </div>
     </div>
-  </div>
+  );
+}
 
 export default DeleteDialogue;
