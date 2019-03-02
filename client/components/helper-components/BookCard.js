@@ -2,7 +2,7 @@ import React from 'react';
 
 const BookCard = ({ title, commentcount }) => 
   <li>
-    <b>{title}</b> <i>{commentcount}</i> {commentcount == 1 ? 'comment' : 'comments'}
+    <b>{title}</b> <i>{commentcount} {commentcount == 1 ? 'comment' : 'comments'}</i>
   </li>
 
 export default BookCard;
