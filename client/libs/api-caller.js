@@ -23,3 +23,17 @@ export const fetchNewBook = (url, title) => {
     .then(res => res)
     .catch(err => {}); // to handle
 };
+
+export const fetchDeleteAll = url => {
+  const initObject = {
+    method: 'DELETE'
+  };
+
+  return fetch(url, initObject)
+    .then(res => {
+      if (!res.ok) return Promise.reject(res.status); // to handle
+      return res.json();
+    })
+    .then(res => res)
+    .catch(err => {}); // to handle
+};
