@@ -24,7 +24,7 @@ export const fetchNewBook = (url, title) => {
     .catch(err => {}); // to handle
 };
 
-export const fetchDeleteAll = url => {
+export const fetchDeleteBooks = url => {
   const initObject = {
     method: 'DELETE'
   };

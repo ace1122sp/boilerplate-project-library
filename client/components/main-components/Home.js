@@ -8,7 +8,7 @@ import BookCard from '../helper-components/BookCard';
 import AddBook from '../helper-components/AddBook';
 import DeleteDialogue from '../helper-components/DeleteDialogue';
 
-import { fetchBooks, fetchDeleteAll } from '../../libs/api-caller';
+import { fetchBooks, fetchDeleteBooks } from '../../libs/api-caller';
 import { API_BASE } from '../../constants';
 
 const portal = document.getElementById('portal');
@@ -37,7 +37,7 @@ const Home = () => {
   };  
 
   const deleteHandler = () => {
-    fetchDeleteAll(API_BASE)
+    fetchDeleteBooks(API_BASE)
       .then(res => {})
       .catch(err => {});
     
