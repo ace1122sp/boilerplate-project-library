@@ -12,14 +12,16 @@ const fetchBooks = url => {
       return res.json();
     })
     .then(res => res)
-    .catch(err => {})
+    .catch(err => {}) // to handle
 } 
 
 const Home = () => {
   const [books, updateBooks] = useState([]);
   const [loading, setLoadingStatus] = useState(true);
 
-  const addBooks = () => {
+  const renderBooks = books => books.map(book => <BookCard key={book._id} title={book.title} commentcount={book.commentcount} />);
+
+  const setInitBooks = () => {
     fetchBooks(API_BASE)
       .then(res => {
         updateBooks(() => {
@@ -34,10 +36,8 @@ const Home = () => {
       });
   };
 
-  const showBooks = books.map(book => <BookCard key={Date.now()} title={book.title} commentcount={book.commentcount} />);
-
   useEffect(() => {
-    addBooks();
+    setInitBooks();
   }, []);
 
   return (
@@ -45,7 +45,7 @@ const Home = () => {
       {loading && <LoadingPanel />}
       <section id='book-list'>
         {books.length === 0 && <EmptyLibrary />}
-        <ul>{showBooks}</ul>
+        <ul>{renderBooks(books)}</ul>
       </section>
       <aside id='controls-main'>
         <button id='add-book'>
