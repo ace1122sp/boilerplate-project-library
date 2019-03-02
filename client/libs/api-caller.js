@@ -37,3 +37,18 @@ export const fetchDeleteBooks = url => {
     .then(res => res)
     .catch(err => {}); // to handle
 };
+
+export const fetchComment = (url, comment) => {
+  const initObject = {
+    method: 'POST', 
+    headers: { 'Content-Type': 'application/json' }, 
+    body: JSON.stringify({ comment })
+  };
+
+  return fetch(url, initObject)
+    .then(res => {
+      if (!res.ok) return Promise.reject(res.status); // to handle
+    })
+    .then(res => res)
+    .catch(err => {}); // to handle
+};
