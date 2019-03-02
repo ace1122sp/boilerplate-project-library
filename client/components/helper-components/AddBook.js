@@ -1,8 +1,8 @@
 import React from 'react';
 
-const AddBook = () => 
+const AddBook = ({ close }) => 
   <div>
-    <button>x</button>
+    <button onClick={close}>x</button>
     <form>
       <label>Book Title</label>
       <input type='text' placeholder='new book' autoFocus />
