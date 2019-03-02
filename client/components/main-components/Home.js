@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router-dom';
+
 import EmptyLibrary from '../helper-components/EmptyLibrary';
 import LoadingPanel from '../helper-components/LoadingPanel';
 import BookCard from '../helper-components/BookCard';
 import AddBook from '../helper-components/AddBook';
-import { fetchBooks, fetchDeleteAll } from '../../libs/api-caller';
-
-import { API_BASE } from '../../constants';
 import DeleteDialogue from '../helper-components/DeleteDialogue';
+
+import { fetchBooks, fetchDeleteAll } from '../../libs/api-caller';
+import { API_BASE } from '../../constants';
 
 const portal = document.getElementById('portal');
 
@@ -17,7 +19,7 @@ const Home = () => {
   const [addBookDialogue, toggleAddBookDialogue] = useState(false);
   const [deleteDialogue, toggleDeleteDialogue] = useState(false);
 
-  const renderBooks = () => books.map(book => <BookCard key={book._id} title={book.title} commentcount={book.commentcount} />);
+  const renderBooks = () => books.map(book => <Link to={`/books/${book._id}`} key={book._id}><BookCard title={book.title} commentcount={book.commentcount} /></Link>);
 
   const setInitBooks = () => {
     fetchBooks(API_BASE)
