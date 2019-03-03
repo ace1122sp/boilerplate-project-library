@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Redirect } from 'react-router-dom';
+
+import DeleteDialogue from '../helper-components/DeleteDialogue';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
 import { API_BASE } from '../../constants';
@@ -39,18 +42,20 @@ const Book = ({ match }) => {
 
   const sendComment = e => {
     e.preventDefault();
-    fetchComment(URL, commentValue)
-      .then(res => {
-        console.log(res);
-        updateCommentValue('');
-      })
+    if (commentValue.length) {
+      let comment = commentValue;
+      fetchComment(URL, comment)
+      .then(res => {})
       .catch(err => {}); // to handle
+    }
+
+    updateCommentValue('');
   }
 
   return (
     <main>
       {deleted && <Redirect to="/" />}
-      {deleteDialogue && ReactDOM.createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
+      {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
       <h1>{title}</h1>
       <section>
         {!comments.length && <p>No comments yet...</p>}
@@ -59,7 +64,7 @@ const Book = ({ match }) => {
         </ul>
       </section>      
       <div>
-        <button onClick={deleteHandler}>delete book</button>
+        <button onClick={() => toggleDeleteDialogue(true)}>delete book</button>
       </div>
       <form onSubmit={sendComment}>
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} />
