@@ -53,14 +53,10 @@ const Book = ({ match }) => {
     }
 
     updateCommentValue('');
-  }
+  };
 
-  return (
-    <main>
-      {deleted && <Redirect to="/" />}
-      {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
-      {loading ? <LoadingPanel /> : (
-      <Fragment>
+  const RenderHtml = () => 
+    <Fragment>
       <h1>{title}</h1>
       <section>
         {!comments.length && <p>No comments yet...</p>}
@@ -75,7 +71,13 @@ const Book = ({ match }) => {
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} />
         <button>add</button>
       </form>
-      </Fragment>)}
+    </Fragment>
+
+  return (
+    <main>
+      {deleted && <Redirect to="/" />}
+      {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
+      {loading ? <LoadingPanel /> : <RenderHtml />}
     </main>
   );
 }

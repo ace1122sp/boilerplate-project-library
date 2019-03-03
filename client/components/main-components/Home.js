@@ -42,32 +42,33 @@ const Home = () => {
       .catch(err => {});
     
     toggleDeleteDialogue(false);
-  }
+  };
 
   useEffect(() => {
     setInitBooks();    
   }, []);
 
+  const RenderHtml = () => 
+    <Fragment>
+      <section id='book-list'>
+        {books.length === 0 && <EmptyLibrary />}
+        <ul>{renderBooks()}</ul>
+      </section>      
+      <aside id='controls-main'>
+        <button id='add-book' onClick={() => toggleAddBookDialogue(true)}>
+          add book
+        </button>
+        <button id='delete-all' onClick={() => toggleDeleteDialogue(true)}>
+          delete all
+        </button>
+      </aside>
+    </Fragment>
+
   return (
     <main>
       {addBookDialogue && createPortal(<AddBook close={() => toggleAddBookDialogue(false)} />, portal)}
       {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
-      {loading ? <LoadingPanel /> : (
-      <Fragment>
-        <section id='book-list'>
-          {books.length === 0 && <EmptyLibrary />}
-          <ul>{renderBooks()}</ul>
-        </section>      
-        <aside id='controls-main'>
-          <button id='add-book' onClick={() => toggleAddBookDialogue(true)}>
-            add book
-          </button>
-          <button id='delete-all' onClick={() => toggleDeleteDialogue(true)}>
-            delete all
-          </button>
-        </aside>
-      </Fragment>
-      )}
+      {loading ? <LoadingPanel /> : <RenderHtml />}
     </main>
   );
 }
