@@ -38,7 +38,9 @@ const Book = ({ match }) => {
         toggleDeleteDialogue(false);
         updateDeletedStatus(true);
       })
-      .catch(res => {}); // to handle
+      .catch(res => {
+        updateErrorStatus(true);
+      });
   };
 
   const renderComments = () => comments.map((comment, i) => <li key={i}>{comment}</li>);
@@ -53,7 +55,9 @@ const Book = ({ match }) => {
       let comment = commentValue;
       fetchComment(URL, comment)
       .then(res => {})
-      .catch(err => {}); // to handle
+      .catch(err => {
+        updateErrorStatus(true);
+      });
     }
 
     updateCommentValue('');
