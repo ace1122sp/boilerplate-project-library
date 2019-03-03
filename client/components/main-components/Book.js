@@ -7,11 +7,13 @@ import LoadingPanel from '../helper-components/LoadingPanel';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
 import { API_BASE } from '../../constants';
+import ErrorScreen from './ErrorScreen';
 
 const Book = ({ match }) => {
   const [title, setTitle] = useState('Book');
   const [comments, updateComments] = useState([]);
   const [loading, setLoadingStatus] = useState(true);
+  const [error, updateErrorStatus] = useState(false);
   const [deleteDialogue, toggleDeleteDialogue] = useState(false);
   const [deleted, updateDeletedStatus] = useState(false);
   const [commentValue, updateCommentValue] = useState('');
@@ -25,7 +27,9 @@ const Book = ({ match }) => {
         updateComments([...book.comments]);
         setLoadingStatus(false);
       })
-      .catch(err => {}); // to handle
+      .catch(err => {
+        updateErrorStatus(true);
+      });
   }, []);
 
   const deleteHandler = () => {
@@ -73,11 +77,16 @@ const Book = ({ match }) => {
       </form>
     </Fragment>
 
-  return (
-    <main>
+  const BookWrapper = () => 
+    <Fragment>
       {deleted && <Redirect to="/" />}
       {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
       {loading ? <LoadingPanel /> : <RenderHtml />}
+    </Fragment>
+
+  return (
+    <main>
+      {error ? <ErrorScreen msg='something went wrong' /> : <BookWrapper />}
     </main>
   );
 }
