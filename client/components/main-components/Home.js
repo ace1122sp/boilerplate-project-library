@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 
@@ -52,19 +52,22 @@ const Home = () => {
     <main>
       {addBookDialogue && createPortal(<AddBook close={() => toggleAddBookDialogue(false)} />, portal)}
       {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
-      {loading && <LoadingPanel />}
-      <section id='book-list'>
-        {books.length === 0 && <EmptyLibrary />}
-        <ul>{renderBooks()}</ul>
-      </section>      
-      <aside id='controls-main'>
-        <button id='add-book' onClick={() => toggleAddBookDialogue(true)}>
-          add book
-        </button>
-        <button id='delete-all' onClick={() => toggleDeleteDialogue(true)}>
-          delete all
-        </button>
-      </aside>
+      {loading ? <LoadingPanel /> : (
+      <Fragment>
+        <section id='book-list'>
+          {books.length === 0 && <EmptyLibrary />}
+          <ul>{renderBooks()}</ul>
+        </section>      
+        <aside id='controls-main'>
+          <button id='add-book' onClick={() => toggleAddBookDialogue(true)}>
+            add book
+          </button>
+          <button id='delete-all' onClick={() => toggleDeleteDialogue(true)}>
+            delete all
+          </button>
+        </aside>
+      </Fragment>
+      )}
     </main>
   );
 }

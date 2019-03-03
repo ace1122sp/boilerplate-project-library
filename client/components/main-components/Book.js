@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Redirect } from 'react-router-dom';
 
 import DeleteDialogue from '../helper-components/DeleteDialogue';
+import LoadingPanel from '../helper-components/LoadingPanel';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
 import { API_BASE } from '../../constants';
@@ -10,6 +11,7 @@ import { API_BASE } from '../../constants';
 const Book = ({ match }) => {
   const [title, setTitle] = useState('Book');
   const [comments, updateComments] = useState([]);
+  const [loading, setLoadingStatus] = useState(true);
   const [deleteDialogue, toggleDeleteDialogue] = useState(false);
   const [deleted, updateDeletedStatus] = useState(false);
   const [commentValue, updateCommentValue] = useState('');
@@ -21,6 +23,7 @@ const Book = ({ match }) => {
       .then(book => {
         setTitle(book.title);        
         updateComments([...book.comments]);
+        setLoadingStatus(false);
       })
       .catch(err => {}); // to handle
   }, []);
@@ -56,6 +59,8 @@ const Book = ({ match }) => {
     <main>
       {deleted && <Redirect to="/" />}
       {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
+      {loading ? <LoadingPanel /> : (
+      <Fragment>
       <h1>{title}</h1>
       <section>
         {!comments.length && <p>No comments yet...</p>}
@@ -70,6 +75,7 @@ const Book = ({ match }) => {
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} />
         <button>add</button>
       </form>
+      </Fragment>)}
     </main>
   );
 }
