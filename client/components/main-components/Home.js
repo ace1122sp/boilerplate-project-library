@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 
 import EmptyLibrary from '../helper-components/EmptyLibrary';
@@ -50,8 +50,8 @@ const Home = () => {
 
   return (
     <main>
-      {addBookDialogue && ReactDOM.createPortal(<AddBook close={() => toggleAddBookDialogue(false)} />, portal)}
-      {deleteDialogue && ReactDOM.createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
+      {addBookDialogue && createPortal(<AddBook close={() => toggleAddBookDialogue(false)} />, portal)}
+      {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
       {loading && <LoadingPanel />}
       <section id='book-list'>
         {books.length === 0 && <EmptyLibrary />}
