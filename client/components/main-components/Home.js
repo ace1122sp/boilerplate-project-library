@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import EmptyLibrary from '../helper-components/EmptyLibrary';
 import LoadingPanel from '../helper-components/LoadingPanel';
@@ -14,14 +14,42 @@ import { API_BASE } from '../../constants';
 
 const portal = document.getElementById('portal');
 
-const Home = () => {
+const Home = ({ socket }) => {
   const [books, updateBooks] = useState([]);
   const [loading, setLoadingStatus] = useState(true);
   const [addBookDialogue, toggleAddBookDialogue] = useState(false);
   const [error, updateErrorStatus] = useState(false);
   const [deleteDialogue, toggleDeleteDialogue] = useState(false);
 
-  const renderBooks = () => books.map(book => <Link to={`/books/${book._id}`} key={book._id}><BookCard title={book.title} commentcount={book.commentcount} /></Link>);
+  const renderBooks = () => books.map(book => <li key={book._id} ><Link to={`/books/${book._id}`} ><BookCard title={book.title} commentcount={book.commentcount} /></Link></li>);
+
+  useEffect(() => {    
+    setInitBooks();    
+  }, []);
+
+  useEffect(() => {    
+    socket.on('new book', book => { 
+      updateBooks(books => [...books, book]);
+    });
+
+    socket.on('delete book', id => {
+      updateBooks(books => books.filter(book => book._id !== id));
+    });
+
+    socket.on('delete all books', () => {
+      updateBooks([]);
+    });
+
+    // socket.on('comment added', comment => {
+      
+    // });
+
+    return () => {
+      socket.off('new book');
+      socket.off('delete book');
+      socket.off('delete all books');
+    }
+  }, []);
 
   const setInitBooks = () => {
     fetchBooks(API_BASE)
@@ -38,19 +66,18 @@ const Home = () => {
 
   const deleteHandler = () => {
     fetchDeleteBooks(API_BASE)
-      .then(res => {})
+      .then(res => {
+        updateBooks([]);
+        socket.emit('delete all books');
+      })
       .catch(err => {});
     
     toggleDeleteDialogue(false);
   };
 
-  useEffect(() => {
-    setInitBooks();    
-  }, []);
-
   const RenderHtml = () => 
     <Fragment>
-      <section id='book-list'>
+      <section id='book-list'> 
         {books.length === 0 && <EmptyLibrary />}
         <ul>{renderBooks()}</ul>
       </section>      

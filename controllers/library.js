@@ -40,7 +40,6 @@ const addBook = (req, res, next) => {
   let book = new Book(res.locals.book);
   book.save()
     .then(b => {
-      console.log('book: \n', b);
       res.status(201).json(b);
     })
     .catch(err => {

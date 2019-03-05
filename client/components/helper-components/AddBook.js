@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { fetchNewBook } from '../../libs/api-caller';
 import { API_BASE } from '../../constants';
+import io from 'socket.io-client';
+
+const socket = io();
 
 const AddBook = ({ close }) => {
   const [inputValue, setInputValue] = useState('');
@@ -9,7 +12,7 @@ const AddBook = ({ close }) => {
     e.preventDefault();
     fetchNewBook(API_BASE, inputValue)
       .then(res => {
-        console.log(res); // should turn on loading or something
+        socket.emit('new book', res);
         close(); // temporary solution
       })
       .catch(err => {}); // to handle

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,15 +13,25 @@ import NotFound from './NotFound';
 
 library.add(fab, faChartLine, faBalanceScale, faThumbsUp, faEyeSlash, faSpinner, faHouseDamage, faFolder );
 
-const App = () => 
-  <Fragment>
-    <Header />
-    <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/books/:id" component={Book} />
-      <Route path="/" component={NotFound} />
-    </Switch>
-    <Footer />
-  </Fragment>
+const App = ({ socket }) => {
+  
+  useEffect(() => {
+    return () => {
+      socket.close();
+    };
+  }, []);
 
+  return (
+    <Fragment>
+      <Header />
+      <Switch>
+        <Route exact path="/" render={props => <Home {...props} socket={socket} />} />
+        <Route path="/books/:id" render={props => <Book {...props} socket={socket} />} />
+        <Route path="/" component={NotFound} />
+      </Switch>
+      <Footer />
+    </Fragment>
+  );
+}
+  
 export default App;
