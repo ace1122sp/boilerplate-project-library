@@ -97,6 +97,7 @@ const Book = ({ match, socket }) => {
       .then(res => {
         updateComments(comments => [...comments, comment]);
         socket.emit('new comment', comment);
+        socket.emit('typing comment end', match.params.id);
       })
       .catch(err => {
         updateErrorStatus(true);
