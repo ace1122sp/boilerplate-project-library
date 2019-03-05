@@ -14,7 +14,54 @@ const runner = require('./test-runner');
 const dbConnect = require('./db');
 const errorHandler = config.app.env === 'PRODUCTION' ? require('./libs/prodErrorHandler') : require('./libs/devErrorHandler');
 
-const app = express();
+const app = express();    
+
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+// keep count of opened sockets
+let sockets = {};
+let socketsNumber = 0;
+
+io.on('connection', socket => {
+
+  if (!sockets[socket.id]) socketsNumber++;
+  sockets[socket.id] = socket.id;
+
+  console.log('a user connected');
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+    delete sockets[socket.id];
+    socketsNumber--;
+  });
+
+  socket.on('new book', book => {
+    io.emit('new book', book);
+  });
+
+  // this needs to be cleaned of with use of nsp or rooms
+  socket.on('delete book', id => {
+    socket.broadcast.emit('delete book', id);
+  });
+
+  socket.on('delete all books', () => {
+    socket.broadcast.emit('delete all books');
+  });
+
+  // this needs to be cleaned up with use of nsp or rooms
+  socket.on('new comment', comment => {
+    socket.broadcast.emit('new comment', comment);
+  });
+
+  socket.on('typing comment', bookId => {
+    socket.broadcast.emit('typing comment', bookId);
+  });
+
+  socket.on('typing comment end', bookId => {
+    socket.broadcast.emit('typing comment end', bookId);
+  });
+});
 
 dbConnect();
 
@@ -70,7 +117,7 @@ app.use(function(req, res, next) {
 });
 
 //Start our server and tests!
-app.listen(process.env.PORT || 3000, function () {
+http.listen(process.env.PORT || 3000, function () {
   console.log("Listening on port " + config.app.port);
   if(process.env.NODE_ENV==='test') {
     console.log('Running Tests...');
@@ -84,6 +131,10 @@ app.listen(process.env.PORT || 3000, function () {
       }
     }, 1500);
   }
+  
+  setInterval(() => {
+    console.log('connected sockets at: ' + Date() + ': ' + socketsNumber);
+  }, 5000);
 });
 
 module.exports = app; //for unit/functional testing

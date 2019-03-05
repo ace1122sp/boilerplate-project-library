@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 const BookCard = ({ title, commentcount }) => 
-  <li>
+  <Fragment>
     <b>{title}</b>
-    <i>{commentcount} {commentcount == 1 ? 'comment' : 'comments'}</i>
-  </li>
+    <i>{commentcount || 0} {commentcount == 1 ? 'comment' : 'comments'}</i>
+  </Fragment>
 
 export default BookCard;
