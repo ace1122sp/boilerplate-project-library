@@ -19,13 +19,31 @@ class ServerSocket {
 
   _addEventServerEmit(socket, event) {
     socket.on(event, params => {
+      // need to sanitize and validate params
       this.io.emit(event, params);
     });
   }
 
   _addEventBroadcast(socket, event) {
     socket.on(event, params => {
+      // need to sanitize and validate params
       socket.broadcast.emit(event, params)
+    });
+  }
+
+  broadcastBookEvents(socket) {
+    const deleteEvents = ServerSocket.BOOK_EVENTS.slice(1);
+
+    deleteEvents.forEach(e => {
+      this._addEventBroadcast(socket, e);
+    });
+
+    this._addEventServerEmit(socket, ServerSocket.BOOK_EVENTS[0]);
+  }
+
+  broadcastCommentEvents(socket) {
+    ServerSocket.COMMENT_EVENTS.forEach(e => {
+      this._addEventBroadcast(socket, e);
     });
   }
 
@@ -39,22 +57,9 @@ class ServerSocket {
         console.log('user disconnected');
         this.recordDisconnect(socket.id);
       });
-    
-      this._addEventServerEmit(socket, 'new book');
-    
-      // this needs to be cleaned of with use of nsp or rooms
 
-      this._addEventBroadcast(socket, 'delete book');
-    
-      this._addEventBroadcast(socket, 'delete all books');
-    
-      // this needs to be cleaned up with use of nsp or rooms
-      
-      this._addEventBroadcast(socket, 'new comment');
-    
-      this._addEventBroadcast(socket, 'typing comment');
-    
-      this._addEventBroadcast(socket, 'typing comment end');
+      this.broadcastBookEvents(socket);
+      this.broadcastCommentEvents(socket);
     });  
   }
 
@@ -84,5 +89,14 @@ class ServerSocket {
     clearInterval(this.logger);
   }
 };
+
+Object.defineProperties(ServerSocket, {
+  COMMENT_EVENTS: {
+    value: ['new comment', 'typing comment', 'typing comment end']
+  },
+  BOOK_EVENTS: {
+    value: ['new book', 'delete book', 'delete all books']
+  }
+});
 
 module.exports = ServerSocket;
