@@ -4,10 +4,11 @@ import { Redirect } from 'react-router-dom';
 
 import DeleteDialogue from '../helper-components/DeleteDialogue';
 import LoadingPanel from '../helper-components/LoadingPanel';
+import ErrorScreen from './ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
+import { unsubscribeSocketEvents } from '../../libs/socket-methods';
 import { API_BASE } from '../../constants';
-import ErrorScreen from './ErrorScreen';
 
 const Book = ({ match, socket }) => {
   const [title, setTitle] = useState('Book');
@@ -55,12 +56,8 @@ const Book = ({ match, socket }) => {
       if (bookId === match.params.id) updateTypingCommentStatus(false);
     });
     
-    return () => {
-      socket.off('delete book');
-      socket.off('delete book');
-      socket.off('new comment');
-      socket.off('typing comment');
-      socket.off('typing comment end');
+    return () => {      
+      unsubscribeSocketEvents(socket, ['delete book', 'delete all books', 'new comment', 'typing comment', 'typing comment end']);
     }
   }); 
 

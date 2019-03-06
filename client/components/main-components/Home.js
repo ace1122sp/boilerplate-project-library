@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import DeleteDialogue from '../helper-components/DeleteDialogue';
 import ErrorScreen from '../main-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks } from '../../libs/api-caller';
+import { unsubscribeSocketEvents } from '../../libs/socket-methods';
 import { API_BASE } from '../../constants';
 
 const portal = document.getElementById('portal');
@@ -43,13 +44,11 @@ const Home = ({ socket }) => {
     // socket.on('comment added', comment => {
       
     // });
-
     return () => {
-      socket.off('new book');
-      socket.off('delete book');
-      socket.off('delete all books');
-    }
+      unsubscribeSocketEvents(socket, ['new book', 'delete book', 'delete all books']);
+    };
   }, []);
+
 
   const setInitBooks = () => {
     fetchBooks(API_BASE)
