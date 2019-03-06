@@ -13,7 +13,7 @@ const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
 const dbConnect = require('./db');
 const errorHandler = config.app.env === 'PRODUCTION' ? require('./libs/prodErrorHandler') : require('./libs/devErrorHandler');
-const ServerSocket = require('./server-socket');
+const ServerSocket = require('./libs/server-socket');
 
 const app = express();    
 
