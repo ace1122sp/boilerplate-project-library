@@ -17,33 +17,33 @@ class ServerSocket {
     this._deleteSocket(id);
   }
 
-  _addEventServerEmit(socket, event) {
+  _addEventListenerAndServerEmit(socket, event) {
     socket.on(event, params => {
       // need to sanitize and validate params
       this.io.emit(event, params);
     });
   }
 
-  _addEventBroadcast(socket, event) {
+  _addEventListenerAndBroadcast(socket, event) {
     socket.on(event, params => {
       // need to sanitize and validate params
       socket.broadcast.emit(event, params)
     });
   }
 
-  broadcastBookEvents(socket) {
+  subscribeToBookEvents(socket) {
     const deleteEvents = ServerSocket.BOOK_EVENTS.slice(1);
 
     deleteEvents.forEach(e => {
-      this._addEventBroadcast(socket, e);
+      this._addEventListenerAndBroadcast(socket, e);
     });
 
-    this._addEventServerEmit(socket, ServerSocket.BOOK_EVENTS[0]);
+    this._addEventListenerAndServerEmit(socket, ServerSocket.BOOK_EVENTS[0]);
   }
 
-  broadcastCommentEvents(socket) {
+  subscribeToCommentEvents(socket) {
     ServerSocket.COMMENT_EVENTS.forEach(e => {
-      this._addEventBroadcast(socket, e);
+      this._addEventListenerAndBroadcast(socket, e);
     });
   }
 
@@ -58,8 +58,8 @@ class ServerSocket {
         this.recordDisconnect(socket.id);
       });
 
-      this.broadcastBookEvents(socket);
-      this.broadcastCommentEvents(socket);
+      this.subscribeToBookEvents(socket);
+      this.subscribeToCommentEvents(socket);
     });  
   }
 
