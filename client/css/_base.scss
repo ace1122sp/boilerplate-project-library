@@ -15,16 +15,20 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  position: relative;
 }
 
 main {
   display: flex;
-  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  flex-direction: row;
   flex-grow: 1;
   margin: 0;
-  justify-content: center;
-  align-content: center;
+  padding: $space-large;
+  justify-content: flex-start;
+  align-content: flex-start;
 }
 
 button {

@@ -1,0 +1,16 @@
+.section-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.aside-controls {
+  width: 35%;
+  background-color: burlywood;
+}
+
+.long-text-handle {
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  white-space: nowrap;
+}
