@@ -1,0 +1,10 @@
+@import 'variables';
+@import 'reset';
+
+.header {
+  background: $primary-color;
+  opacity: .8;
+  padding: $space-large 0 $space-large $space;
+  font-size: $h1-size;
+  box-shadow: $box-shadow;
+}
