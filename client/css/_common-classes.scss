@@ -5,12 +5,31 @@
 }
 
 .aside-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
   width: 35%;
-  background-color: burlywood;
+}
+
+.control-buttons {
+  padding: $space;
+  border-radius: 40%;
+  background: transparent;
+  box-shadow: $box-shadow;
+  width: 80px;
+  height: 80px;
 }
 
 .long-text-handle {
   text-overflow: ellipsis;
   overflow: hidden; 
   white-space: nowrap;
+}
+
+#delete-all {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

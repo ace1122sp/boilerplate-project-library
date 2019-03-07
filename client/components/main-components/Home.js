@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import EmptyLibrary from '../helper-components/EmptyLibrary';
 import LoadingPanel from '../helper-components/LoadingPanel';
@@ -22,7 +23,7 @@ const Home = ({ socket }) => {
   const [error, updateErrorStatus] = useState(false);
   const [deleteDialogue, toggleDeleteDialogue] = useState(false);
 
-  const renderBooks = () => books.map(book => <li key={book._id} ><Link to={`/books/${book._id}`} ><BookCard title={book.title} commentcount={book.commentcount} /></Link></li>);
+  const renderBooks = () => books.map(book => <li key={book._id} className='long-text-handle'><Link to={`/books/${book._id}`} ><BookCard title={book.title} commentcount={book.commentcount} /></Link></li>);
 
   useEffect(() => {    
     setInitBooks();    
@@ -76,16 +77,16 @@ const Home = ({ socket }) => {
 
   const RenderHtml = () => 
     <Fragment>
-      <section id='book-list'> 
+      <section id='book-list' className='section-list'> 
         {books.length === 0 && <EmptyLibrary />}
         <ul>{renderBooks()}</ul>
       </section>      
-      <aside id='controls-main'>
-        <button id='add-book' onClick={() => toggleAddBookDialogue(true)}>
-          add book
+      <aside id='controls-main' className='aside-controls'>
+        <button id='add-book' className='control-buttons' onClick={() => toggleAddBookDialogue(true)}>
+        <FontAwesomeIcon size='1x' icon='plus' /> <FontAwesomeIcon size='2x' icon='book' />
         </button>
-        <button id='delete-all' onClick={() => toggleDeleteDialogue(true)}>
-          delete all
+        <button id='delete-all' className='control-buttons' onClick={() => toggleDeleteDialogue(true)}>
+        <FontAwesomeIcon size='2x' icon='trash-alt' /> delete all
         </button>
       </aside>
     </Fragment>
