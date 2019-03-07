@@ -28,7 +28,7 @@ const AddBook = ({ close }) => {
       <button onClick={close}>x</button>
       <form onSubmit={handleSubmit}>
         <label>Book Title</label>
-        <input type='text' placeholder='new book' autoFocus onChange={handleChange} value={inputValue} />
+        <input type='text' placeholder='new book' autoFocus onChange={handleChange} value={inputValue} required />
         <button>add</button>
       </form>
     </div>
