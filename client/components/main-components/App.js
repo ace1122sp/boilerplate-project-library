@@ -12,6 +12,8 @@ import NotFound from './NotFound';
 
 library.add(fab, faChartLine, faBalanceScale, faThumbsUp, faEyeSlash, faSpinner, faHouseDamage, faFolder );
 
+import '../../css/App.scss';
+
 const App = ({ socket }) => {
   
   useEffect(() => {
