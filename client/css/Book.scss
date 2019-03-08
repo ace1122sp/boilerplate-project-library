@@ -1,0 +1,26 @@
+@import 'variables';
+
+.main {
+  flex-direction: column;
+}
+
+.h1 {
+  margin-bottom: $space-large;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.comments-section {
+  flex-grow: 1;
+}
+
+.comment {
+  margin-bottom: $space;
+  padding: $space-small;
+  border-radius: $radius;
+  box-shadow: $box-shadow-cards;
+}

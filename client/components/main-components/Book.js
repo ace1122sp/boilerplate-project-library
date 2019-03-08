@@ -10,6 +10,8 @@ import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-calle
 import { unsubscribeSocketEvents } from '../../libs/socket-methods';
 import { API_BASE } from '../../constants';
 
+import '../../css/Book.scss';
+
 const Book = ({ match, socket }) => {
   const [title, setTitle] = useState('Book');
   const [comments, updateComments] = useState([]);
@@ -77,7 +79,7 @@ const Book = ({ match, socket }) => {
       });
   };
 
-  const renderComments = () => comments.map((comment, i) => <li key={i}>{comment}</li>);
+  const renderComments = () => comments.map((comment, i) => <li key={i} className='comment'>{comment}</li>);
 
   const handleInputChange = e => {
     updateCommentValue(e.target.value);
@@ -123,20 +125,18 @@ const Book = ({ match, socket }) => {
     </div>
 
   const Controls = () => 
-    <Fragment>
-      <div>
-        <button onClick={openDeleteDialogueInPortal}>delete book</button>
-      </div>
+    <div className='controls'>
+      <button onClick={openDeleteDialogueInPortal}>delete book</button>
       <form onSubmit={sendComment}>
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} autoFocus />
         <button>add</button>
       </form>
-    </Fragment>
+    </div>
 
   const RenderHtml = () => 
     <Fragment>
-      <h1>{title}</h1>
-      <section>
+      <h1 className='h1'>{title}</h1>
+      <section className='comments-section'>
         {!comments.length && <p>No comments yet...</p>}
         <ul>
           {renderComments()}
@@ -155,7 +155,7 @@ const Book = ({ match, socket }) => {
     </Fragment>
 
   return (
-    <main>
+    <main className='main'>
       {error ? <ErrorScreen msg='something went wrong' /> : <BookWrapper />}
     </main>
   );
