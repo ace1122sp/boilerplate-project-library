@@ -33,3 +33,10 @@
   align-items: center;
   justify-content: center;
 }
+
+.book-card {
+  padding: $space $space-small;
+  margin: $space 0;
+  font-size: 1.1rem;
+  box-shadow: $box-shadow-cards;
+}
