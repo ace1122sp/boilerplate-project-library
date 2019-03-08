@@ -1,28 +1,27 @@
 @import 'variables';
 
-address {
-  font-style: normal;
-  font-weight: 600;
-  color: $primary-color-dark; 
-  margin-top: $space-small !important;
-}
-
 .footer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  padding: $space-small;
+  text-align: center;
+  padding: $space 0;
   opacity: .2;
   background-color: $primary-color; 
   box-shadow: $box-shadow-footer;  
+  
+  address {
+    font-style: normal;
+    margin-left: $space-large;    
+    float: left;
+    font-weight: 600;
+    color: $primary-color-dark; 
+  }
 }
 
 .social-media {
   display: inherit;
-  margin: $space-small $space 0;
+  margin-right: $space;
 
   li {
     margin: 0 $space-small;
+    display: inline;
   }
 }
