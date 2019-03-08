@@ -2,7 +2,7 @@ import React from 'react';
 
 const DeleteDialogue = ({ close, deleteHandler }) => {
   return (
-    <div>
+    <div className='dialogue-card dialogue-delete-custom'>
       <h2>Are you sure?</h2>
       <div>
         <button onClick={deleteHandler}>Delete</button>

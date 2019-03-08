@@ -24,10 +24,10 @@ const AddBook = ({ close }) => {
   }
 
   return (
-    <div>
-      <button onClick={close}>x</button>
-      <form onSubmit={handleSubmit}>
-        <label>Book Title</label>
+    <div className='dialogue-card'>
+      <button onClick={close} className='btn-in-corner'>x</button>
+      <form onSubmit={handleSubmit} className='dialogue-main'>
+        <label>Book Title </label>
         <input type='text' placeholder='new book' autoFocus onChange={handleChange} value={inputValue} required />
         <button>add</button>
       </form>

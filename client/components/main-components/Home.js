@@ -73,8 +73,24 @@ const Home = ({ socket }) => {
       .catch(err => {});
     
     toggleDeleteDialogue(false);
+    portal.className = 'closed';
   };
 
+  const openAddBookDialogueInPortal = () => {
+    portal.className = 'opened';
+    toggleAddBookDialogue(true);
+  }
+
+  const openDeleteDialogueInPortal = () => {
+    portal.className = 'opened';
+    toggleDeleteDialogue(true);
+  }
+
+  const closeDialogue = f => {
+    f(false);
+    portal.className = 'closed';
+  }
+ 
   const RenderHtml = () => 
     <Fragment>
       <section id='book-list' className='section-list'> 
@@ -82,10 +98,10 @@ const Home = ({ socket }) => {
         <ul>{renderBooks()}</ul>
       </section>      
       <aside id='controls-main' className='aside-controls'>
-        <button id='add-book' className='control-buttons' onClick={() => toggleAddBookDialogue(true)}>
+        <button id='add-book' className='control-buttons' onClick={openAddBookDialogueInPortal}>
         <FontAwesomeIcon size='1x' icon='plus' /> <FontAwesomeIcon size='2x' icon='book' />
         </button>
-        <button id='delete-all' className='control-buttons' onClick={() => toggleDeleteDialogue(true)}>
+        <button id='delete-all' className='control-buttons' onClick={openDeleteDialogueInPortal}>
         <FontAwesomeIcon size='2x' icon='trash-alt' /> delete all
         </button>
       </aside>
@@ -93,8 +109,8 @@ const Home = ({ socket }) => {
 
   const HomeWrapper = () => 
     <Fragment>
-      {addBookDialogue && createPortal(<AddBook close={() => toggleAddBookDialogue(false)} />, portal)}
-      {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
+      {addBookDialogue && createPortal(<AddBook close={() => closeDialogue(toggleAddBookDialogue)} />, portal)}
+      {deleteDialogue && createPortal(<DeleteDialogue close={() => closeDialogue(toggleDeleteDialogue)} deleteHandler={deleteHandler} />, portal)}
       {loading ? <LoadingPanel /> : <RenderHtml />}
     </Fragment>
 

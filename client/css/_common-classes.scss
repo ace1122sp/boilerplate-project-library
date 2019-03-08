@@ -40,3 +40,31 @@
   font-size: 1.1rem;
   box-shadow: $box-shadow-cards;
 }
+
+.dialogue-card {
+  padding: $space-large;
+  box-shadow: $box-shadow;
+  background: $primary-color;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 400px;
+  height: 180px;
+}
+
+.btn-in-corner {
+  width: $space-large;
+  height: $space-large;
+  margin-bottom: $space-large;
+}
+
+.dialogue-main {
+  margin: $space-large;
+  text-align: center;
+}
+
+.dialogue-delete-custom {
+  padding: $space-large;
+  justify-content: space-evenly;
+  align-items: center;
+}
