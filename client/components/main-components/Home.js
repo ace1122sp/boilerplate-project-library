@@ -23,7 +23,7 @@ const Home = ({ socket }) => {
   const [error, updateErrorStatus] = useState(false);
   const [deleteDialogue, toggleDeleteDialogue] = useState(false);
 
-  const renderBooks = () => books.map(book => <li key={book._id} className='long-text-handle'><Link to={`/books/${book._id}`} ><BookCard title={book.title} commentcount={book.commentcount} /></Link></li>);
+  const renderBooks = () => books.map(book => <li key={book._id} className='book-card long-text-handle'><Link to={`/books/${book._id}`} ><BookCard title={book.title} commentcount={book.commentcount} /></Link></li>);
 
   useEffect(() => {    
     setInitBooks();    
