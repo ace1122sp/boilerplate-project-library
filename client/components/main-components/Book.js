@@ -71,6 +71,9 @@ const Book = ({ match, socket }) => {
       })
       .catch(res => {
         updateErrorStatus(true);
+      })
+      .then(() => {
+        portal.className = 'closed'; // should this go here??? 
       });
   };
 
@@ -104,6 +107,16 @@ const Book = ({ match, socket }) => {
     updateCommentValue('');
   };
 
+  const closeDialogue = () => {
+    toggleDeleteDialogue(false);
+    portal.className = 'closed';
+  };
+
+  const openDeleteDialogueInPortal = () => {
+    portal.className = 'opened';
+    toggleDeleteDialogue(true);
+  }
+
   const DeletedNotification = () => 
     <div>
       <p>Somebody has just deleted this book. You can still stay on this page, but you can't add comments.</p>
@@ -112,7 +125,7 @@ const Book = ({ match, socket }) => {
   const Controls = () => 
     <Fragment>
       <div>
-        <button onClick={() => toggleDeleteDialogue(true)}>delete book</button>
+        <button onClick={openDeleteDialogueInPortal}>delete book</button>
       </div>
       <form onSubmit={sendComment}>
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} autoFocus />
@@ -136,7 +149,7 @@ const Book = ({ match, socket }) => {
   const BookWrapper = () => 
     <Fragment>
       {deleted && <Redirect to="/" />}
-      {deleteDialogue && createPortal(<DeleteDialogue close={() => toggleDeleteDialogue(false)} deleteHandler={deleteHandler} />, portal)}
+      {deleteDialogue && createPortal(<DeleteDialogue close={closeDialogue} deleteHandler={deleteHandler} />, portal)}
       {loading ? <LoadingPanel /> : <RenderHtml />}
       {bookDeleted && <DeletedNotification />}
     </Fragment>
