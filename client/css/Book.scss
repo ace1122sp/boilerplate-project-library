@@ -1,24 +1,49 @@
 @import 'variables';
 
 .main {
+  position: relative;
+  display: flex;
   flex-direction: column;
 }
 
 .h1 {
-  margin-bottom: $space-large;
+  margin-bottom: $space-large;    
 }
 
 .controls {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
+  flex-direction: row-reverse;  
+  justify-content: space-around;
+  align-items: center;
+  margin: 0;
+  margin-top: $space-large;
+  height: 150px;
+  padding: $space;
 }
 
 .comments-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   flex-grow: 1;
+  overflow-y: auto;
+}
+
+.comments-section::-webkit-scrollbar {
+  width: $space;
+  background-color: gray;
+}
+
+.comments-section::-webkit-scrollbar-thumb {
+  background-color: black;
+}
+
+.comments-section::-webkit-scrollbar-button {
+  height: 0;
 }
 
 .comment {
+  width: 50%;
   margin-bottom: $space;
   padding: $space-small;
   border-radius: $radius;

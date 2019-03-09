@@ -136,13 +136,11 @@ const Book = ({ match, socket }) => {
   const RenderHtml = () => 
     <Fragment>
       <h1 className='h1'>{title}</h1>
-      <section className='comments-section'>
-        {!comments.length && <p>No comments yet...</p>}
-        <ul>
-          {renderComments()}
-          {someoneTypingComment && <li><i>someone is typing...</i></li>}
-        </ul>
-      </section>      
+      <ul className='comments-section'>
+        {!comments.length && <li>No comments yet...</li>}
+        {renderComments()}
+        {someoneTypingComment && <li><i>someone is typing...</i></li>}
+      </ul>
       {!bookDeleted && <Controls />}
     </Fragment>
 
