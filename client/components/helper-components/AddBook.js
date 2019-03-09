@@ -29,7 +29,7 @@ const AddBook = ({ close }) => {
       <form onSubmit={handleSubmit} className='dialogue-main'>
         <label>Book Title </label>
         <input type='text' placeholder='new book' autoFocus onChange={handleChange} value={inputValue} required />
-        <button>add</button>
+        <button className='standard-btn'>add</button>
       </form>
     </div>
   );

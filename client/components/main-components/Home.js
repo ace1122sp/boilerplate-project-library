@@ -8,7 +8,7 @@ import LoadingPanel from '../helper-components/LoadingPanel';
 import BookCard from '../helper-components/BookCard';
 import AddBook from '../helper-components/AddBook';
 import DeleteDialogue from '../helper-components/DeleteDialogue';
-import ErrorScreen from '../main-components/ErrorScreen';
+import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks } from '../../libs/api-caller';
 import { unsubscribeSocketEvents } from '../../libs/socket-methods';

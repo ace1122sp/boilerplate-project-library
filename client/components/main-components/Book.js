@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import DeleteDialogue from '../helper-components/DeleteDialogue';
 import LoadingPanel from '../helper-components/LoadingPanel';
-import ErrorScreen from './ErrorScreen';
+import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
 import { unsubscribeSocketEvents } from '../../libs/socket-methods';
@@ -121,15 +121,15 @@ const Book = ({ match, socket }) => {
 
   const DeletedNotification = () => 
     <div className='notification'>
-      <p>Somebody has just deleted this book. You can still stay on this page, but you can't add comments.</p>
+      <p>Somebody has just deleted this book. You can stay on this page, but you can't add comments.</p>
     </div>
 
   const Controls = () => 
     <div className='controls'>
-      <button onClick={openDeleteDialogueInPortal}>delete book</button>
+      <button onClick={openDeleteDialogueInPortal} className='standard-btn'>delete book</button>
       <form onSubmit={sendComment}>
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} autoFocus />
-        <button>add</button>
+        <button className='standard-btn'>add</button>
       </form>
     </div>
 

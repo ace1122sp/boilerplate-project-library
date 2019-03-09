@@ -5,8 +5,8 @@ const DeleteDialogue = ({ close, deleteHandler }) => {
     <div className='dialogue-card dialogue-delete-custom'>
       <h2>Are you sure?</h2>
       <div>
-        <button onClick={deleteHandler} className='warning-colors'>Delete</button>
-        <button onClick={close}>Cancel</button>
+        <button onClick={deleteHandler} className='warning-colors standard-btn'>Delete</button>
+        <button onClick={close} className='standard-btn'>Cancel</button>
       </div>
     </div>
   );
