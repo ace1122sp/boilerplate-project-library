@@ -17,7 +17,7 @@ body {
   flex-direction: column;
   height: 100vh;
   position: relative;
-  font-family: Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;  
 }
 
 main {
@@ -52,7 +52,11 @@ button {
   box-shadow: $box-shadow-cards;
   cursor: pointer;
   background: $secondary-color;
-  color: $on-secondary-color;
+  color: $on-secondary-color;  
+}
+
+button, a {
+  transition: all 300ms ease;
 }
 
 input[type='text'] {
