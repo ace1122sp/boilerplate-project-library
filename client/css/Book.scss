@@ -16,8 +16,7 @@
   justify-content: space-around;
   align-items: center;
   margin: 0;
-  margin-top: $space-large;
-  height: 150px;
+  margin-top: $space-large;  
   padding: $space;
 }
 
@@ -27,15 +26,17 @@
   align-items: flex-start;
   flex-grow: 1;
   overflow-y: auto;
+  margin-top: $space-large;
+  margin-bottom: $space-large;
 }
 
 .comments-section::-webkit-scrollbar {
   width: $space;
-  background-color: gray;
+  background-color: $primary-color;
 }
 
 .comments-section::-webkit-scrollbar-thumb {
-  background-color: black;
+  background-color: $primary-color-dark;
 }
 
 .comments-section::-webkit-scrollbar-button {

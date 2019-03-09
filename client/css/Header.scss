@@ -2,7 +2,8 @@
 @import 'reset';
 
 .header {
-  background: $primary-color;
+  background: $primary-color-light;
+  color: $on-primary-color;
   opacity: .8;
   padding: $space-large 0 $space-large $space;
   font-size: $h1-size;

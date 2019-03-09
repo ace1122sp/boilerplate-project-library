@@ -3,16 +3,18 @@
 .footer {
   text-align: center;
   padding: $space 0;
-  opacity: .2;
-  background-color: $primary-color; 
-  box-shadow: $box-shadow-footer;  
+  margin-top: $space;
+  opacity: .9;
+  background-color: $secondary-color-dark; 
+  color: $on-secondary-color;
+  box-shadow: $box-shadow;   
   
   address {
     font-style: normal;
     margin-left: $space-large;    
     float: left;
     font-weight: 600;
-    color: $primary-color-dark; 
+    color: $secondary-color-light; 
   }
 }
 

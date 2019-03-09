@@ -1,9 +1,13 @@
 // colors
-$primary-color: inherit;
-$primary-color-light: inherit;
-$primary-color-dark: inherit;
-$on-primary-color: inherit;
-$shadow-color: gray;
+$primary-color: #fafafa;
+$primary-color-light: #ffffff;
+$primary-color-dark: #c7c7c7;
+$secondary-color: #424242;
+$secondary-color-light: #6d6d6d;
+$secondary-color-dark: #1b1b1b;
+$on-secondary-color: $primary-color-light;
+$on-primary-color: $secondary-color-dark;
+$shadow-color: $secondary-color-light;
 $error-color: #ef5350;
 
 // sizes

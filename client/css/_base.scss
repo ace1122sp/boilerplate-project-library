@@ -17,6 +17,7 @@ body {
   flex-direction: column;
   height: 100vh;
   position: relative;
+  font-family: Helvetica, sans-serif;
 }
 
 main {
@@ -33,11 +34,11 @@ main {
 
 section::-webkit-scrollbar {
   width: 6.5px;
-  background-color: gray;
+  background-color: $primary-color;
 }
 
 section::-webkit-scrollbar-thumb {
-  background-color: black;
+  background-color: $primary-color-dark;
 }
 
 section::-webkit-scrollbar-button {
@@ -45,7 +46,26 @@ section::-webkit-scrollbar-button {
 }
 
 button {
+  border-radius: $radius;
+  padding: $space-small;
+  margin: $space-small;
+  box-shadow: $box-shadow-cards;
   cursor: pointer;
+  background: $secondary-color;
+  color: $on-secondary-color;
+}
+
+input[type='text'] {
+  box-shadow: $box-shadow;
+  border-radius: $radius;
+  border-style: none;
+  padding: $space-small;
+  margin-right: $space-small;
+  margin-left: $space-small;
+}
+
+i {
+  color: $secondary-color-light;
 }
 
 // at the bottom

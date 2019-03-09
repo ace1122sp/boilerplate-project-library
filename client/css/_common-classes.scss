@@ -15,7 +15,8 @@
 .control-buttons {
   padding: $space;
   border-radius: 40%;
-  background: transparent;
+  background: $primary-color-light;
+  color: $secondary-color;
   box-shadow: $box-shadow;
   width: 80px;
   height: 80px;
@@ -39,6 +40,10 @@
   margin: $space 0;
   font-size: 1.1rem;
   box-shadow: $box-shadow-cards;
+
+  b {
+    color: $on-primary-color; 
+  }
 }
 
 .dialogue-card {
@@ -67,4 +72,24 @@
   padding: $space-large;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.single-message {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification {
+  border-radius: $radius;
+  padding: $space;
+  box-shadow: $box-shadow-cards;
+}
+
+.warning-colors {
+  background: $error-color;
+  color: $on-secondary-color;
 }
