@@ -1,10 +1,8 @@
 import React from 'react';
 
 const ErrorScreen = ({ msg }) => 
-  <main>
-    <div>
-      <p>{msg}</p>
-    </div>
-  </main>
+  <div className='single-message'>
+    <h2>{msg}</h2>
+  </div>
 
 export default ErrorScreen;

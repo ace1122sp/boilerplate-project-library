@@ -154,7 +154,7 @@ const Book = ({ match, socket }) => {
 
   return (
     <main className='main'>
-      {error ? <ErrorScreen msg='something went wrong' /> : <BookWrapper />}
+      {error ? <ErrorScreen msg='Something went wrong or page does not exist...' /> : <BookWrapper />}
     </main>
   );
 }
