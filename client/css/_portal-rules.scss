@@ -11,6 +11,15 @@
   opacity: .9;
 }
 
+.fade-in {
+  animation: fade-in 300ms ease;
+}
+
+.fade-out {
+  animation: fade-out 300ms ease;
+  animation-fill-mode: forwards;
+}
+
 .closed {
   display: none;
 }
@@ -20,4 +29,22 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  } 
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
