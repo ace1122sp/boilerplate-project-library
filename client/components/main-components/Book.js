@@ -76,7 +76,7 @@ const Book = ({ match, socket }) => {
         updateErrorStatus(true);
       })
       .then(() => {
-        portal.className = 'closed'; // should this go here??? 
+        closeDialogue(portal);
       });
   };
 

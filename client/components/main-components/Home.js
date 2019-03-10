@@ -13,7 +13,7 @@ import ErrorScreen from '../helper-components/ErrorScreen';
 import { fetchBooks, fetchDeleteBooks } from '../../libs/api-caller';
 import { unsubscribeSocketEvents } from '../../libs/socket-methods';
 import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
-import { API_BASE } from '../../constants';
+import { API_BASE, SOMETHING_WRONG } from '../../constants';
 
 const portal = document.getElementById('portal');
 
@@ -71,10 +71,10 @@ const Home = ({ socket }) => {
         updateBooks([]);
         socket.emit('delete all books');
       })
-      .catch(err => {});
-    
-    toggleDeleteDialogue(false);
-    portal.className = 'closed';
+      .catch(err => {})
+      .then(() => {
+        closeDialogue(portal, toggleDeleteDialogue);
+      });
   };
  
   const RenderHtml = () => 
@@ -100,9 +100,9 @@ const Home = ({ socket }) => {
       {loading ? <LoadingPanel /> : <RenderHtml />}
     </Fragment>
 
-  return ( // msg for Error Screen should be gotten from constants
+  return ( 
     <main>
-      {error ? <ErrorScreen msg='something went wrong' /> : <HomeWrapper />} 
+      {error ? <ErrorScreen msg={SOMETHING_WRONG} /> : <HomeWrapper />} 
     </main>
   );
 }

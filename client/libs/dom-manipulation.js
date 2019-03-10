@@ -1,4 +1,4 @@
-export const openDialogue = (elm, f) => {
+export const openDialogue = (elm, f = () => {}) => {
   elm.className = 'opened';
   elm.classList.add('fade-in');
   let timeout = setTimeout(() => {
@@ -7,7 +7,7 @@ export const openDialogue = (elm, f) => {
   }, 302);
 };
 
-export const closeDialogue = (elm, f) => {
+export const closeDialogue = (elm, f = () => {}) => {
   f(false);
   elm.classList.remove('fade-in');
   elm.classList.add('fade-out');
