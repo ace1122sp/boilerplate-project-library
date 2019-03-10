@@ -9,7 +9,7 @@ import ErrorScreen from '../helper-components/ErrorScreen';
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
 import { unsubscribeSocketEvents } from '../../libs/socket-methods';
 import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
-import { API_BASE } from '../../constants';
+import { API_BASE, SOMETHING_WRONG_OR_PAGE_NOT_EXIST } from '../../constants';
 
 import '../../css/Book.scss';
 
@@ -145,7 +145,7 @@ const Book = ({ match, socket }) => {
 
   return (
     <main className='main'>
-      {error ? <ErrorScreen msg='Something went wrong or page does not exist...' /> : <BookWrapper />}
+      {error ? <ErrorScreen msg={SOMETHING_WRONG_OR_PAGE_NOT_EXIST} /> : <BookWrapper />}
     </main>
   );
 }

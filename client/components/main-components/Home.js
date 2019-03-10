@@ -95,7 +95,7 @@ const Home = ({ socket }) => {
 
   const HomeWrapper = () => 
     <Fragment>
-      {addBookDialogue && createPortal(<AddBook close={() => closeDialogue(portal, toggleAddBookDialogue)} />, portal)}
+      {addBookDialogue && createPortal(<AddBook close={() => closeDialogue(portal, toggleAddBookDialogue)} handleError={() => updateErrorStatus(true)} />, portal)}
       {deleteDialogue && createPortal(<DeleteDialogue close={() => closeDialogue(portal, toggleDeleteDialogue)} deleteHandler={deleteHandler} />, portal)}
       {loading ? <LoadingPanel /> : <RenderHtml />}
     </Fragment>
