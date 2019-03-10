@@ -12,6 +12,7 @@ import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks } from '../../libs/api-caller';
 import { unsubscribeSocketEvents } from '../../libs/socket-methods';
+import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
 import { API_BASE } from '../../constants';
 
 const portal = document.getElementById('portal');
@@ -75,21 +76,6 @@ const Home = ({ socket }) => {
     toggleDeleteDialogue(false);
     portal.className = 'closed';
   };
-
-  const openAddBookDialogueInPortal = () => {
-    portal.className = 'opened';
-    toggleAddBookDialogue(true);
-  }
-
-  const openDeleteDialogueInPortal = () => {
-    portal.className = 'opened';
-    toggleDeleteDialogue(true);
-  }
-
-  const closeDialogue = f => {
-    f(false);
-    portal.className = 'closed';
-  }
  
   const RenderHtml = () => 
     <Fragment>
@@ -98,10 +84,10 @@ const Home = ({ socket }) => {
         <ul>{renderBooks()}</ul>
       </section>      
       <aside id='controls-main' className='aside-controls'>
-        <button id='add-book' className='control-buttons' onClick={openAddBookDialogueInPortal}>
+        <button id='add-book' className='control-buttons' onClick={() => openDialogue(portal, toggleAddBookDialogue)}>
         <FontAwesomeIcon size='1x' icon='plus' /> <FontAwesomeIcon size='2x' icon='book' />
         </button>
-        <button id='delete-all' className='control-buttons' onClick={openDeleteDialogueInPortal}>
+        <button id='delete-all' className='control-buttons' onClick={() => openDialogue(portal, toggleDeleteDialogue)}>
         <FontAwesomeIcon size='2x' icon='trash-alt' /> delete all
         </button>
       </aside>
@@ -109,8 +95,8 @@ const Home = ({ socket }) => {
 
   const HomeWrapper = () => 
     <Fragment>
-      {addBookDialogue && createPortal(<AddBook close={() => closeDialogue(toggleAddBookDialogue)} />, portal)}
-      {deleteDialogue && createPortal(<DeleteDialogue close={() => closeDialogue(toggleDeleteDialogue)} deleteHandler={deleteHandler} />, portal)}
+      {addBookDialogue && createPortal(<AddBook close={() => closeDialogue(portal, toggleAddBookDialogue)} />, portal)}
+      {deleteDialogue && createPortal(<DeleteDialogue close={() => closeDialogue(portal, toggleDeleteDialogue)} deleteHandler={deleteHandler} />, portal)}
       {loading ? <LoadingPanel /> : <RenderHtml />}
     </Fragment>
 

@@ -8,6 +8,7 @@ import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
 import { unsubscribeSocketEvents } from '../../libs/socket-methods';
+import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
 import { API_BASE } from '../../constants';
 
 import '../../css/Book.scss';
@@ -109,16 +110,6 @@ const Book = ({ match, socket }) => {
     updateCommentValue('');
   };
 
-  const closeDialogue = () => {
-    toggleDeleteDialogue(false);
-    portal.className = 'closed';
-  };
-
-  const openDeleteDialogueInPortal = () => {
-    portal.className = 'opened';
-    toggleDeleteDialogue(true);
-  }
-
   const DeletedNotification = () => 
     <div className='notification'>
       <p>Somebody has just deleted this book. You can stay on this page, but you can't add comments.</p>
@@ -126,7 +117,7 @@ const Book = ({ match, socket }) => {
 
   const Controls = () => 
     <div className='controls'>
-      <button onClick={openDeleteDialogueInPortal} className='standard-btn'>delete book</button>
+      <button onClick={() => openDialogue(portal, toggleDeleteDialogue)} className='standard-btn'>delete book</button>
       <form onSubmit={sendComment}>
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} autoFocus />
         <button className='standard-btn'>add</button>
@@ -147,7 +138,7 @@ const Book = ({ match, socket }) => {
   const BookWrapper = () => 
     <Fragment>
       {deleted && <Redirect to="/" />}
-      {deleteDialogue && createPortal(<DeleteDialogue close={closeDialogue} deleteHandler={deleteHandler} />, portal)}
+      {deleteDialogue && createPortal(<DeleteDialogue close={() => closeDialogue(portal, toggleDeleteDialogue)} deleteHandler={deleteHandler} />, portal)}
       {loading ? <LoadingPanel /> : <RenderHtml />}
       {bookDeleted && <DeletedNotification />}
     </Fragment>
