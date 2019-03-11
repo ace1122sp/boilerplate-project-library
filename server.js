@@ -24,7 +24,7 @@ const serverSocket = new ServerSocket(http);
 serverSocket.listenOnServer();
 
 // log number of active sockets every 5 seconds
-serverSocket.loggerOn(5);
+// serverSocket.loggerOn(5);
 
 // connect to db
 dbConnect();
