@@ -112,7 +112,7 @@ const Book = ({ match, socket }) => {
 
   const DeletedNotification = () => 
     <div className='notification'>
-      <p>Somebody has just deleted this book. You can stay on this page, but you can't add comments.</p>
+      <p>Somebody has just deleted this book. You can stay on this page, but you can't leave comments anymore.</p>
     </div>
 
   const Controls = () => 

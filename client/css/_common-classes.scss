@@ -98,11 +98,27 @@
 }
 
 .notification {
+  position: relative;
+  align-self: flex-start;
+  transform:  translateX(-300vw);
   border-radius: $radius;
   padding: $space;
   box-shadow: $box-shadow-cards;
   background: $secondary-color;
   color: $on-secondary-color;
+  animation: slide-in 1000ms ease-out;
+  animation-fill-mode: forwards;  
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-300vw);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .warning-colors {
