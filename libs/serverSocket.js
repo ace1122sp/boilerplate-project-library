@@ -1,19 +1,18 @@
 const io = require('socket.io');
 
 class ServerSocket {
-  constructor(server, namespaces) {
+  constructor(server) {
     this.io = io(server);
-    this.namespaces = [...namespaces];
     this.sockets = {};
     this.socketsNumber = 0;
   }
 
-  recordConnect(id) {
+  _recordConnect(id) {
     if (!this.sockets[id]) this._increase();
     this._addSocket(id);
   }
 
-  recordDisconnect(id) {
+  _recordDisconnect(id) {
     if (this.sockets[id]) this._decrease();
     this._deleteSocket(id);
   }
@@ -32,7 +31,7 @@ class ServerSocket {
     });
   }
 
-  subscribeToBookEvents(socket, emitter = null) {
+  _subscribeToBookEvents(socket, emitter = null) {
     const deleteEvents = ServerSocket.BOOK_EVENTS.slice(1);
 
     deleteEvents.forEach(e => {
@@ -42,38 +41,53 @@ class ServerSocket {
     if (emitter) this._addEventListenerAndServerEmit(socket, emitter, ServerSocket.BOOK_EVENTS[0]);
   }
 
-  subscribeToCommentEvents(socket) {
-    ServerSocket.COMMENT_EVENTS.forEach(e => {
-      this._addEventListenerAndBroadcast(socket, e);
+  _emitToRoom(client, event) {
+    client.on(event, params => {
+      client.to(params).emit(event, params);
     });
   }
 
-  listenOnServer() {    
-    this.startSocket('/home');
-    this.recordRooms();
+  _addRoomVisiting(client) {
+    client.on('room-in', id => {
+      client.join(id);
+    });
+
+    client.on('room-out', id => {
+      client.leave(id);        
+    });        
+  }
+  
+  _handleRoomEvents(client) {
+    ServerSocket.ROOM_EVENTS.forEach(event => {
+      if (event === 'new comment') {
+        client.on('new comment', params => {
+          client.to(params[0]).emit('new comment', params[1]);
+        });
+      } else {
+        this._emitToRoom(client, event);
+      }
+    });
+
+    // this._addEventListenerAndBroadcast(client, 'delete book');
   }
 
-  startSocket(nsp) {
-    const server = this.io.of(nsp).on('connection', client => {
-      this.subscribeToBookEvents(client, server);
-      if (nsp !== '/home') this.subscribeToCommentEvents(client);
-      this.recordConnect(client.id);
-      client.on('disconnect', () => this.recordDisconnect(client.id));
+  _enableRooms(client) {
+    this._addRoomVisiting(client);
+    this._handleRoomEvents(client);
+  }
+
+  _connectionRecords(client) {
+    this._recordConnect(client.id);
+    client.on('disconnect', () => this._recordDisconnect(client.id));
+  }
+
+  startListening() {
+    const server = this.io.on('connection', client => {
+      this._subscribeToBookEvents(client, server);    
+      this._enableRooms(client);
+      this._connectionRecords(client);
     });
     
-  }
-
-  recordRooms() {
-    this.io.of('/books').on('connection', client => {      
-      client.on('room-in', id => {
-        client.join(id);
-      });
-
-      client.on('room-out', id => {
-        client.leave(id);        
-      });
-
-    });
   }
 
   _addSocket(id) {
@@ -104,8 +118,8 @@ class ServerSocket {
 };
 
 Object.defineProperties(ServerSocket, {
-  COMMENT_EVENTS: {
-    value: ['new comment', 'typing comment', 'typing comment end']
+  ROOM_EVENTS: {
+    value: ['new comment', 'typing comment', 'typing comment end', 'delete book']
   },
   BOOK_EVENTS: {
     value: ['new book', 'delete book', 'delete all books']

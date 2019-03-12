@@ -18,12 +18,6 @@ class ClientSocket {
   emit(event, params) {
     this.socket.emit(event, params);
   };
-};
-
-class BookClientSocket extends ClientSocket {
-  constructor(nsp) {
-    super(nsp);
-  }
 
   enterRoom(id) {
     this.socket.emit('room-in', id);
@@ -32,8 +26,6 @@ class BookClientSocket extends ClientSocket {
   leaveRoom(id) {
     this.socket.emit('room-out', id);
   }
-}
+};
 
-export const home = new ClientSocket();
-export const books = new BookClientSocket();
-
+export const clientSocket = new ClientSocket();

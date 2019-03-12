@@ -13,8 +13,7 @@ const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
 const dbConnect = require('./db');
 const errorHandler = config.app.env === 'PRODUCTION' ? require('./libs/prodErrorHandler') : require('./libs/devErrorHandler');
-// const ServerSocket = require('./libs/serverSocket');
-const ServerSocket = require('./libs/serverSocket.shadow');
+const ServerSocket = require('./libs/serverSocket');
 
 const app = express();    
 
@@ -22,10 +21,10 @@ const http = require('http').Server(app);
 
 // start socket
 const serverSocket = new ServerSocket(http);
-serverSocket.listenOnServer();
+serverSocket.startListening();
 
-// log number of active sockets every 5 seconds
-// serverSocket.loggerOn(5);
+// log number of active sockets every 10 seconds
+// serverSocket.loggerOn(10);
 
 // connect to db
 dbConnect();

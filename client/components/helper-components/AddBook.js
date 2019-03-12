@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { fetchNewBook } from '../../libs/api-caller';
-import { home } from '../../libs/client-socket';
+import { clientSocket } from '../../libs/client-socket';
 import { API_BASE } from '../../constants';
 
 const AddBook = ({ close, handleError }) => {
@@ -11,7 +11,8 @@ const AddBook = ({ close, handleError }) => {
     e.preventDefault();
     fetchNewBook(API_BASE, inputValue)
     .then(res => {
-        home.emit('new book', res);
+        // home.emit('new book', res);
+        clientSocket.emit('new book', res);
         close();
       })
       .catch(err => {
