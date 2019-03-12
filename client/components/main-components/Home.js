@@ -30,31 +30,21 @@ const Home = () => {
     setInitBooks();    
   }, []);
 
-  useEffect(() => {    
-    // home.subscribe('new book', book => { 
-    //   updateBooks(books => [...books, book]);
-    // });
+  useEffect(() => {        
     clientSocket.subscribe('new book', book => { 
       updateBooks(books => [...books, book]);
     });
 
-    // home.subscribe('delete book', id => {
-    //   updateBooks(books => books.filter(book => book._id !== id));
-    // });
     clientSocket.subscribe('delete book', id => {
       updateBooks(books => books.filter(book => book._id !== id));
     });
 
-    // home.subscribe('delete all books', () => {
-    //   updateBooks([]);
-    // });
     clientSocket.subscribe('delete all books', () => {
       updateBooks([]);
     });
 
     return () => {
       const events = ['new book', 'delete book', 'delete all books'];
-      // events.forEach(event => home.unsubscribe(event));
       events.forEach(event => clientSocket.unsubscribe(event));
     };
   }, []);
@@ -76,7 +66,6 @@ const Home = () => {
     fetchDeleteBooks(API_BASE)
       .then(res => {
         updateBooks([]);
-        // home.emit('delete all books');
         clientSocket.emit('delete all books');
       })
       .catch(err => {})
