@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import io from 'socket.io-client';
 
 import { fetchNewBook } from '../../libs/api-caller';
 import { API_BASE } from '../../constants';
-
-const socket = io();
+import { home } from '../../libs/client-socket';
 
 const AddBook = ({ close, handleError }) => {
   const [inputValue, setInputValue] = useState('');
@@ -13,7 +11,8 @@ const AddBook = ({ close, handleError }) => {
     e.preventDefault();
     fetchNewBook(API_BASE, inputValue)
       .then(res => {
-        socket.emit('new book', res);
+        console.log('emitted new book');
+        home.emit('new book', res);
         close();
       })
       .catch(err => {

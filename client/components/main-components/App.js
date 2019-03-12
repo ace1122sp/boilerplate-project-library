@@ -14,25 +14,15 @@ library.add(fab, faBook, faPlus, faTrashAlt, faThumbsUp, faEyeSlash, faSpinner, 
 
 import '../../css/App.scss';
 
-const App = ({ socket }) => {
-  
-  useEffect(() => {
-    return () => {
-      socket.close();
-    };
-  }, []);
-
-  return (
-    <Fragment>
-      <Header />
-      <Switch>
-        <Route exact path="/" render={props => <Home {...props} socket={socket} />} />
-        <Route path="/books/:id" render={props => <Book {...props} socket={socket} />} />
-        <Route path="/" component={NotFound} />
-      </Switch>
-      <Footer />
-    </Fragment>
-  );
-}
+const App = () => 
+  <Fragment>
+    <Header />
+    <Switch>
+      <Route exact path="/" render={props => <Home {...props} />} />
+      <Route path="/books/:id" render={props => <Book {...props} />} />
+      <Route path="/" component={NotFound} />
+    </Switch>
+    <Footer />
+  </Fragment>
   
 export default App;

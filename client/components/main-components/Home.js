@@ -11,13 +11,14 @@ import DeleteDialogue from '../helper-components/DeleteDialogue';
 import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks } from '../../libs/api-caller';
-import { unsubscribeSocketEvents } from '../../libs/socket-methods';
 import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
 import { API_BASE, SOMETHING_WRONG } from '../../constants';
 
+import { home } from '../../libs/client-socket';
+
 const portal = document.getElementById('portal');
 
-const Home = ({ socket }) => {
+const Home = () => {
   const [books, updateBooks] = useState([]);
   const [loading, setLoadingStatus] = useState(true);
   const [addBookDialogue, toggleAddBookDialogue] = useState(false);
@@ -31,26 +32,24 @@ const Home = ({ socket }) => {
   }, []);
 
   useEffect(() => {    
-    socket.on('new book', book => { 
+    home.subscribe('new book', book => { 
       updateBooks(books => [...books, book]);
     });
 
-    socket.on('delete book', id => {
+    home.subscribe('delete book', id => {
       updateBooks(books => books.filter(book => book._id !== id));
     });
 
-    socket.on('delete all books', () => {
+    home.subscribe('delete all books', () => {
       updateBooks([]);
     });
 
-    // socket.on('comment added', comment => {
-      
-    // });
+    // home.subscribe('comment added', comment => {});
     return () => {
-      unsubscribeSocketEvents(socket, ['new book', 'delete book', 'delete all books']);
+      const events = ['new book', 'delete book', 'delete all books'];
+      events.forEach(event => home.unsubscribe(event));
     };
   }, []);
-
 
   const setInitBooks = () => {
     fetchBooks(API_BASE)
@@ -69,7 +68,7 @@ const Home = ({ socket }) => {
     fetchDeleteBooks(API_BASE)
       .then(res => {
         updateBooks([]);
-        socket.emit('delete all books');
+        home.emit('delete all books');
       })
       .catch(err => {})
       .then(() => {

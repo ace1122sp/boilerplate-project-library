@@ -13,7 +13,7 @@ const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
 const dbConnect = require('./db');
 const errorHandler = config.app.env === 'PRODUCTION' ? require('./libs/prodErrorHandler') : require('./libs/devErrorHandler');
-const ServerSocket = require('./libs/server-socket');
+const ServerSocket = require('./libs/serverSocket');
 
 const app = express();    
 
@@ -24,21 +24,21 @@ const serverSocket = new ServerSocket(http);
 serverSocket.listenOnServer();
 
 // log number of active sockets every 5 seconds
-// serverSocket.loggerOn(5);
+serverSocket.loggerOn(5);
 
 // connect to db
 dbConnect();
 
 app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 app.use(helmet());
-app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
-app.use((req, res, next) => {
-  res.set({
-    'Content-Security-Policy': "default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self'; base-uri 'none'"
-  });
+// app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
+// app.use((req, res, next) => {
+//   res.set({
+//     // 'Content-Security-Policy': "default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self'; base-uri 'none'"
+//   });
   
-  next();
-});
+//   next();
+// });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

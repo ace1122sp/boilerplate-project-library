@@ -7,13 +7,14 @@ import LoadingPanel from '../helper-components/LoadingPanel';
 import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
-import { unsubscribeSocketEvents } from '../../libs/socket-methods';
 import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
 import { API_BASE, SOMETHING_WRONG_OR_PAGE_NOT_EXIST } from '../../constants';
 
 import '../../css/Book.scss';
 
-const Book = ({ match, socket }) => {
+import { home, books } from '../../libs/client-socket';
+
+const Book = ({ match }) => {
   const [title, setTitle] = useState('Book');
   const [comments, updateComments] = useState([]);
   const [bookDeleted, updateBookDeletedStatus] = useState(false);
@@ -39,28 +40,32 @@ const Book = ({ match, socket }) => {
   }, []);
 
   useEffect(() => {    
-    socket.on('delete book', id => {
+    // socket.on('delete book', id => {
+    //   if (id === match.params.id) updateBookDeletedStatus(true);
+    // });
+    books.subscribe('delete book', id => {
       if (id === match.params.id) updateBookDeletedStatus(true);
     });
 
-    socket.on('delete all books', () => {
+    books.subscribe('delete all books', () => {
       updateBookDeletedStatus(true);
     });
 
-    socket.on('new comment', comment => {
+    books.subscribe('new comment', comment => {
       updateComments(comments => [...comments, comment]);
     });
 
-    socket.on('typing comment', bookId => {
+    books.subscribe('typing comment', bookId => {
       if (bookId === match.params.id) updateTypingCommentStatus(true);
     });
 
-    socket.on('typing comment end', bookId => {
+    books.subscribe('typing comment end', bookId => {
       if (bookId === match.params.id) updateTypingCommentStatus(false);
     });
     
-    return () => {      
-      unsubscribeSocketEvents(socket, ['delete book', 'delete all books', 'new comment', 'typing comment', 'typing comment end']);
+    return () => {          
+      const events = ['delete book', 'delete all books', 'new comment', 'typing comment', 'typing comment end'];
+      events.forEach(event => books.unsubscribe(event));
     }
   }); 
 
@@ -68,7 +73,8 @@ const Book = ({ match, socket }) => {
     if (bookDeleted) return;
     fetchDeleteBooks(URL)
       .then(res => {
-        socket.emit('delete book', match.params.id);
+        books.emit('delete book', match.params.id);
+        home.emit('delete book', match.params.id);
         toggleDeleteDialogue(false);
         updateDeletedStatus(true);
       })
@@ -85,9 +91,9 @@ const Book = ({ match, socket }) => {
   const handleInputChange = e => {
     updateCommentValue(e.target.value);
     if (e.target.value.length > 0) {
-      socket.emit('typing comment', match.params.id);
+      books.emit('typing comment', match.params.id);
     } else {
-      socket.emit('typing comment end', match.params.id);
+      books.emit('typing comment end', match.params.id);
     }
   };
 
@@ -99,8 +105,8 @@ const Book = ({ match, socket }) => {
       fetchComment(URL, comment)
       .then(res => {
         updateComments(comments => [...comments, comment]);
-        socket.emit('new comment', comment);
-        socket.emit('typing comment end', match.params.id);
+        books.emit('new comment', comment);
+        books.emit('typing comment end', match.params.id);
       })
       .catch(err => {
         updateErrorStatus(true);
