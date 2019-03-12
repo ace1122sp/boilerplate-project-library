@@ -12,9 +12,8 @@ import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks } from '../../libs/api-caller';
 import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
-import { API_BASE, SOMETHING_WRONG } from '../../constants';
-
 import { home } from '../../libs/client-socket';
+import { API_BASE, SOMETHING_WRONG } from '../../constants';
 
 const portal = document.getElementById('portal');
 
@@ -44,7 +43,6 @@ const Home = () => {
       updateBooks([]);
     });
 
-    // home.subscribe('comment added', comment => {});
     return () => {
       const events = ['new book', 'delete book', 'delete all books'];
       events.forEach(event => home.unsubscribe(event));

@@ -1,9 +1,8 @@
 const io = require('socket.io');
 
 class ServerSocket {
-  constructor(server, namespaces) {
+  constructor(server) {
     this.io = io(server);
-    this.namespaces = [...namespaces];
     this.sockets = {};
     this.socketsNumber = 0;
   }
@@ -42,29 +41,12 @@ class ServerSocket {
     if (emitter) this._addEventListenerAndServerEmit(socket, emitter, ServerSocket.BOOK_EVENTS[0]);
   }
 
-  subscribeToCommentEvents(socket) {
-    ServerSocket.COMMENT_EVENTS.forEach(e => {
-      this._addEventListenerAndBroadcast(socket, e);
-    });
-  }
-
   listenOnServer() {    
-    this.startSocket('/home');
-    this.recordRooms();
+    this.startSocket();
   }
 
-  startSocket(nsp) {
-    const server = this.io.of(nsp).on('connection', client => {
-      this.subscribeToBookEvents(client, server);
-      if (nsp !== '/home') this.subscribeToCommentEvents(client);
-      this.recordConnect(client.id);
-      client.on('disconnect', () => this.recordDisconnect(client.id));
-    });
-    
-  }
-
-  recordRooms() {
-    this.io.of('/books').on('connection', client => {      
+  startSocket() {
+    const server = this.io.on('connection', client => {
       client.on('room-in', id => {
         client.join(id);
       });
@@ -72,8 +54,27 @@ class ServerSocket {
       client.on('room-out', id => {
         client.leave(id);        
       });
+      this.subscribeToBookEvents(client, server);
+      this.recordConnect(client.id);
+      client.on('disconnect', () => this.recordDisconnect(client.id));
 
+      client.on('new comment', params => {
+        client.to(params[0]).broadcast.emit('new comment', params[1]);
+      });
+
+      client.on('typing comment', room => {
+        client.to(room).emit('typing comment');
+      });
+
+      client.on('typing comment end', room => {
+        client.to(room).broadcast.emit('typing comment end');
+      });
+
+      client.on('delete book', room => {
+        client.to(room).broadcast.emit('delete book');
+      });
     });
+    
   }
 
   _addSocket(id) {

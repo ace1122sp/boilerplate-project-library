@@ -8,11 +8,10 @@ import ErrorScreen from '../helper-components/ErrorScreen';
 
 import { fetchBooks, fetchDeleteBooks, fetchComment } from '../../libs/api-caller';
 import { openDialogue, closeDialogue } from '../../libs/dom-manipulation';
+import { home, books } from '../../libs/client-socket';
 import { API_BASE, SOMETHING_WRONG_OR_PAGE_NOT_EXIST } from '../../constants';
 
 import '../../css/Book.scss';
-
-import { home, books } from '../../libs/client-socket';
 
 const Book = ({ match }) => {
   const [title, setTitle] = useState('Book');
@@ -40,11 +39,13 @@ const Book = ({ match }) => {
   }, []);
 
   useEffect(() => {    
-    // socket.on('delete book', id => {
+    books.enterRoom(match.params.id);
+
+    // books.subscribe('delete book', id => {
     //   if (id === match.params.id) updateBookDeletedStatus(true);
     // });
-    books.subscribe('delete book', id => {
-      if (id === match.params.id) updateBookDeletedStatus(true);
+    books.subscribe('delete book', () => {
+      updateBookDeletedStatus(true);
     });
 
     books.subscribe('delete all books', () => {
@@ -55,17 +56,24 @@ const Book = ({ match }) => {
       updateComments(comments => [...comments, comment]);
     });
 
-    books.subscribe('typing comment', bookId => {
-      if (bookId === match.params.id) updateTypingCommentStatus(true);
+    // books.subscribe('typing comment', bookId => {
+    //   if (bookId === match.params.id) updateTypingCommentStatus(true);
+    // });
+    books.subscribe('typing comment', () => {
+      updateTypingCommentStatus(true);
     });
 
-    books.subscribe('typing comment end', bookId => {
-      if (bookId === match.params.id) updateTypingCommentStatus(false);
+    // books.subscribe('typing comment end', bookId => {
+    //   if (bookId === match.params.id) updateTypingCommentStatus(false);
+    // });
+    books.subscribe('typing comment end', () => {
+      updateTypingCommentStatus(false);
     });
     
     return () => {          
       const events = ['delete book', 'delete all books', 'new comment', 'typing comment', 'typing comment end'];
       events.forEach(event => books.unsubscribe(event));
+      books.leaveRoom(match.params.id);
     }
   }); 
 
@@ -105,7 +113,7 @@ const Book = ({ match }) => {
       fetchComment(URL, comment)
       .then(res => {
         updateComments(comments => [...comments, comment]);
-        books.emit('new comment', comment);
+        books.emit('new comment', [match.params.id, comment]);
         books.emit('typing comment end', match.params.id);
       })
       .catch(err => {

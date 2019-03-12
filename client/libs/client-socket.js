@@ -1,8 +1,8 @@
 import io from 'socket.io-client';
 
 class ClientSocket {
-  constructor(nsp) {
-    this.socket = io(nsp);
+  constructor() {
+    this.socket = io();
   }
 
   subscribe(event, cb) {
@@ -20,6 +20,20 @@ class ClientSocket {
   };
 };
 
-export const home = new ClientSocket('/home');
-export const books = new ClientSocket('/books');
+class BookClientSocket extends ClientSocket {
+  constructor(nsp) {
+    super(nsp);
+  }
+
+  enterRoom(id) {
+    this.socket.emit('room-in', id);
+  }
+
+  leaveRoom(id) {
+    this.socket.emit('room-out', id);
+  }
+}
+
+export const home = new ClientSocket();
+export const books = new BookClientSocket();
 

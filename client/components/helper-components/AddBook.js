@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import { fetchNewBook } from '../../libs/api-caller';
-import { API_BASE } from '../../constants';
 import { home } from '../../libs/client-socket';
+import { API_BASE } from '../../constants';
 
 const AddBook = ({ close, handleError }) => {
   const [inputValue, setInputValue] = useState('');
@@ -10,8 +10,7 @@ const AddBook = ({ close, handleError }) => {
   const handleSubmit = e => {
     e.preventDefault();
     fetchNewBook(API_BASE, inputValue)
-      .then(res => {
-        console.log('emitted new book');
+    .then(res => {
         home.emit('new book', res);
         close();
       })
