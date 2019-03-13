@@ -11,7 +11,9 @@ const morgan = require('morgan');
 const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
-const dbConnect = require('./db');
+const dbConnect = require('./libs/db');
+const staticCompressor = require('./libs/staticCompressor');
+const { notFound, sendIndexHTML } = require('./controllers/general');
 const errorHandler = config.app.env === 'PRODUCTION' ? require('./libs/prodErrorHandler') : require('./libs/devErrorHandler');
 const ServerSocket = require('./libs/serverSocket');
 
@@ -22,9 +24,6 @@ const http = require('http').Server(app);
 // start socket
 const serverSocket = new ServerSocket(http);
 serverSocket.startListening();
-
-// log number of active sockets every 10 seconds
-// serverSocket.loggerOn(10);
 
 // connect to db
 dbConnect();
@@ -45,27 +44,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev')); // configure according to env
 
-app.use('/public', express.static(process.cwd() + '/public'));
-
 // add gzip config
-// app.get('*.js', (req, res, next) => {
-//   req.url = req.url + '.gz';
-//   res.set({
-//     'Content-Encoding': 'gzip',
-//     'Content-Type': 'text/javascript'
-//   });
+app.get('*.js', staticCompressor);
 
-//   next();
-// });
+app.use('/public', express.static(process.cwd() + '/public'));
 
 //Routing for API 
 apiRoutes(app);  
 
 //Index page (static HTML)
 app.route('/*')
-  .get((req, res) => {
-    res.sendFile(process.cwd() + '/views/index.html');
-  });
+  .get(sendIndexHTML);
 
 //For FCC testing purposes
 fccTestingRoutes(app);
@@ -75,11 +64,7 @@ app.use(errorHandler.logErrors);
 app.use(errorHandler.clientResponse);
 
 //404 Not Found Middleware
-app.use(function(req, res, next) {
-  res.status(404)
-    .type('text')
-    .send('Not Found');
-});
+app.use(notFound);
 
 //Start our server and tests!
 http.listen(process.env.PORT || 3000, function () {
