@@ -1,0 +1,44 @@
+@media (max-width: 500px) {
+  .aside-controls {
+    flex-direction: row;
+    padding-bottom: $space;
+    width: unset;
+  }
+
+  .section-list {
+    width: 95%; 
+  }
+
+  .control-buttons {
+    font-size: 14px;
+    width: unset;
+    height: unset;
+    box-shadow: unset;
+  }
+
+  .dialogue-card {
+    width: unset;
+    height: unset;
+  }
+
+  .dialogue-main {
+    display: flex;
+    flex-direction: column;
+
+    input, button {
+      margin-top: $space;
+      margin-bottom: $space;
+    }
+
+    label {
+      margin-bottom: $space;
+    }
+  }
+
+  .dialogue-delete-custom {
+    h2, div {
+      margin-top: $space;
+      margin-bottom: $space;  
+    }
+  }
+}
