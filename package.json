@@ -9,7 +9,7 @@
 		"test": "mocha ./tests",
 		"get-client-bundle": "webpack --mode development --hot",
 		"dev-client": "webpack --mode development --watch",
-		"client-build": "webpack --mode production"
+		"client-build": "webpack --mode production && gzip public/client.bundle.js"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^1.2.15",
