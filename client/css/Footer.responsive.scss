@@ -1,5 +1,8 @@
 @media (max-width: 500px) {
   .footer {
+    padding-top: $space-large;
+    padding-bottom: $space-large;
+
     address {
       float: none;
     }
