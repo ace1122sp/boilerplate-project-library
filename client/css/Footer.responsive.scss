@@ -1,0 +1,14 @@
+@media (max-width: 500px) {
+  .footer {
+    address {
+      float: none;
+    }
+
+    .social-media {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin-top: $space;
+    }
+  }
+}
