@@ -32,6 +32,7 @@ dbConnect();
 app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 app.use(helmet());
 app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
+app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }));
 app.use((req, res, next) => {
   res.set({
     'Content-Security-Policy': "default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self'; base-uri 'none'"
