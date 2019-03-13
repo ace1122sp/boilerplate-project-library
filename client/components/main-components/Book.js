@@ -121,7 +121,7 @@ const Book = ({ match }) => {
 
   const Controls = () => 
     <div className='controls'>
-      <button onClick={() => openDialogue(portal, toggleDeleteDialogue)} className='standard-btn'>delete book</button>
+      <button id='delete-book-btn' onClick={() => openDialogue(portal, toggleDeleteDialogue)} className='standard-btn'>delete book</button>
       <form onSubmit={sendComment}>
         <input type='text' placeholder='your comment' onChange={handleInputChange} value={commentValue} autoFocus />
         <button className='standard-btn'>add</button>
