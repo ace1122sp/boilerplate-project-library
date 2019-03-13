@@ -35,6 +35,7 @@
 		"socket.io": "^2.2.0",
 		"socket.io-client": "^2.2.0",
 		"uuid": "^3.3.2",
+		"validator": "^10.11.0",
 		"zombie": "^6.1.4"
 	},
 	"engines": {

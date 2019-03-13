@@ -1,4 +1,5 @@
 const io = require('socket.io');
+const validate = require('validator');
 
 class ServerSocket {
   constructor(server) {
@@ -27,7 +28,7 @@ class ServerSocket {
   _addEventListenerAndBroadcast(socket, event) {
     socket.on(event, params => {
       // need to sanitize and validate params
-      socket.broadcast.emit(event, params)
+      socket.broadcast.emit(event, params);
     });
   }
 
@@ -43,17 +44,18 @@ class ServerSocket {
 
   _emitToRoom(client, event) {
     client.on(event, params => {
+      // need to sanitize and validate params
       client.to(params).emit(event, params);
     });
   }
 
   _addRoomVisiting(client) {
     client.on('room-in', id => {
-      client.join(id);
+      if (validate.isUUID(id, 4)) client.join(id);      
     });
 
     client.on('room-out', id => {
-      client.leave(id);        
+      if (validate.isUUID(id, 4)) client.leave(id);            
     });        
   }
   
@@ -61,14 +63,13 @@ class ServerSocket {
     ServerSocket.ROOM_EVENTS.forEach(event => {
       if (event === 'new comment') {
         client.on('new comment', params => {
+          // need to sanitize and validate params
           client.to(params[0]).emit('new comment', params[1]);
         });
       } else {
         this._emitToRoom(client, event);
       }
     });
-
-    // this._addEventListenerAndBroadcast(client, 'delete book');
   }
 
   _enableRooms(client) {
