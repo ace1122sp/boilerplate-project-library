@@ -36,10 +36,9 @@ export const fetchDeleteBooks = url => {
   return fetch(url, initObject)
     .then(res => {
       if (!res.ok) return Promise.reject(res.status); 
-      return res.json();
+      return true;
     })
-    .then(res => res)
-    .catch(err => {
+    .catch(err => {      
       throw err;
     });
 };

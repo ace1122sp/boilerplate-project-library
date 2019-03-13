@@ -20,14 +20,12 @@ class ServerSocket {
 
   _addEventListenerAndServerEmit(socket, emitter, event) {
     socket.on(event, params => {
-      // need to sanitize and validate params
       emitter.emit(event, params);
     });
   }
 
   _addEventListenerAndBroadcast(socket, event) {
     socket.on(event, params => {
-      // need to sanitize and validate params
       socket.broadcast.emit(event, params);
     });
   }
@@ -44,7 +42,6 @@ class ServerSocket {
 
   _emitToRoom(client, event) {
     client.on(event, params => {
-      // need to sanitize and validate params
       client.to(params).emit(event, params);
     });
   }
@@ -63,7 +60,6 @@ class ServerSocket {
     ServerSocket.ROOM_EVENTS.forEach(event => {
       if (event === 'new comment') {
         client.on('new comment', params => {
-          // need to sanitize and validate params
           client.to(params[0]).emit('new comment', params[1]);
         });
       } else {
