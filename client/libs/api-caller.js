@@ -1,15 +1,17 @@
 export const fetchBooks = url => {
   return fetch(url)
     .then(res => {
-      if (!res.ok) return Promise.reject(res.status); // to handle
+      if (!res.ok) return Promise.reject(res.status); 
       return res.json();
     })
     .then(res => res)
-    .catch(err => {}); // to handle
+    .catch(err => {
+      throw err;
+    });
 };
 
 export const fetchNewBook = (url, title) => {
-  const initObject = { // think about adding more headers
+  const initObject = { 
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title })
@@ -17,11 +19,13 @@ export const fetchNewBook = (url, title) => {
 
   return fetch(url, initObject)
     .then(res => {
-      if (!res.ok) return Promise.reject(res.status); // to handle
+      if (!res.ok) return Promise.reject(res.status);
       return res.json();
     })
     .then(res => res)
-    .catch(err => {}); // to handle
+    .catch(err => {
+      throw err;
+    }); 
 };
 
 export const fetchDeleteBooks = url => {
@@ -31,11 +35,13 @@ export const fetchDeleteBooks = url => {
 
   return fetch(url, initObject)
     .then(res => {
-      if (!res.ok) return Promise.reject(res.status); // to handle
+      if (!res.ok) return Promise.reject(res.status); 
       return res.json();
     })
     .then(res => res)
-    .catch(err => {}); // to handle
+    .catch(err => {
+      throw err;
+    });
 };
 
 export const fetchComment = (url, comment) => {
@@ -47,8 +53,10 @@ export const fetchComment = (url, comment) => {
 
   return fetch(url, initObject)
     .then(res => {
-      if (!res.ok) return Promise.reject(res.status); // to handle
+      if (!res.ok) return Promise.reject(res.status); 
     })
     .then(res => res)
-    .catch(err => {}); // to handle
+    .catch(err => {
+      throw err;
+    }); 
 };
