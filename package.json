@@ -4,8 +4,8 @@
 	"description": "boilerplate",
 	"main": "server.js",
 	"scripts": {
-		"start": "node server.js",
-		"dev": "nodemon server.js",
+		"start": "node ./bin/www",
+		"dev": "nodemon ./bin/www",
 		"test": "mocha ./tests",
 		"get-client-bundle": "webpack --mode development --hot",
 		"dev-client": "webpack --mode development --watch",
