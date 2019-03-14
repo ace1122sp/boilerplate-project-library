@@ -12,8 +12,7 @@ const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
 const dbConnect = require('./libs/db');
-const staticCompressor = require('./libs/staticCompressor');
-const { notFound, sendIndexHTML } = require('./controllers/general');
+const { notFound, sendIndexHTML, redirectToCompressedStaticJS } = require('./controllers/general');
 const errorHandler = config.app.env === 'PRODUCTION' ? require('./libs/prodErrorHandler') : require('./libs/devErrorHandler');
 const ServerSocket = require('./libs/serverSocket');
 
@@ -45,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev')); // configure according to env
 
 // add gzip config
-app.get('*.js', staticCompressor);
+app.get('*.js', redirectToCompressedStaticJS);
 
 app.use('/public', express.static(process.cwd() + '/public'));
 

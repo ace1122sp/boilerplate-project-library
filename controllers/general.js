@@ -10,4 +10,14 @@ const sendIndexHTML = (req, res) => {
   res.sendFile(path.resolve('views', 'index.html'));
 };
 
-module.exports = { notFound, sendIndexHTML };
+const redirectToCompressedStaticJS = (req, res, next) => {
+  req.url = req.url + '.gz';
+  res.set({
+    'Content-Encoding': 'gzip',
+    'Content-Type': 'text/javascript'
+  });
+
+  next();
+};
+
+module.exports = { notFound, sendIndexHTML, redirectToCompressedStaticJS };
