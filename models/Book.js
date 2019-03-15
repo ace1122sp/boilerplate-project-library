@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 mongoose.Promise = global.Promise;
 
@@ -27,9 +28,11 @@ BookSchema.static('findAll', function() {
       commentcount: { $size: "$comments"}
     }
   }])
-    .then(books => {
-      return books;
-    })
+    .then(books => books.map(book => {
+        let title = validator.unescape(book.title);
+        return Object.assign({}, book, { title });
+      })
+    )
     .catch(err => {
       throw err;
     });

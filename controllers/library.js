@@ -1,4 +1,5 @@
 const uuid4 = require('uuid/v4');
+const validator = require('validator');
 
 const Book = require('../models/Book');
 
@@ -28,7 +29,10 @@ const getBook = (req, res, next) => {
       if (!book) {
         res.status(404).send('no book exists');
       } else {
-        res.json(book);
+        const unescapedComments = book.comments.map(comment => validator.unescape(comment));
+        const unescapedTitle = validator.unescape(book.title);
+        
+        res.json(Object.assign({}, book, { title: unescapedTitle, comments: unescapedComments }));
       }
     })
     .catch(err => {      
